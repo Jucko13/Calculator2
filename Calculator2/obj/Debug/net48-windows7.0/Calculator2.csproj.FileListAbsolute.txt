@@ -1,0 +1,8 @@
+D:\Ricardo\Github\Calculator2\Calculator2\obj\Debug\net48-windows7.0\Calculator2.csproj.AssemblyReference.cache
+D:\Ricardo\Github\Calculator2\Calculator2\obj\Debug\net48-windows7.0\Calculator2.csproj.SuggestedBindingRedirects.cache
+D:\Ricardo\Github\Calculator2\Calculator2\obj\Debug\net48-windows7.0\Calculator2.FrmMain.resources
+D:\Ricardo\Github\Calculator2\Calculator2\obj\Debug\net48-windows7.0\Calculator2.csproj.GenerateResource.cache
+D:\Ricardo\Github\Calculator2\Calculator2\obj\Debug\net48-windows7.0\Calculator2.GeneratedMSBuildEditorConfig.editorconfig
+D:\Ricardo\Github\Calculator2\Calculator2\obj\Debug\net48-windows7.0\Calculator2.AssemblyInfoInputs.cache
+D:\Ricardo\Github\Calculator2\Calculator2\obj\Debug\net48-windows7.0\Calculator2.AssemblyInfo.cs
+D:\Ricardo\Github\Calculator2\Calculator2\obj\Debug\net48-windows7.0\Calculator2.csproj.CoreCompileInputs.cache
