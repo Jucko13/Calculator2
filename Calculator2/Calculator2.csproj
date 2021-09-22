@@ -17,7 +17,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FCTB" Version="2.16.24" />
+    <PackageReference Include="Jint" Version="3.0.0-beta-2034" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="FastColoredTextBox">
+      <HintPath>FastColoredTextBox.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <ItemGroup>

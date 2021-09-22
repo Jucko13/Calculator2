@@ -2,35 +2,63 @@
   "version": 3,
   "targets": {
     "net6.0-windows7.0": {
-      "FCTB/2.16.24": {
+      "Esprima/2.0.3": {
         "type": "package",
         "compile": {
-          "lib/FastColoredTextBox.dll": {}
+          "lib/netstandard2.0/Esprima.dll": {}
         },
         "runtime": {
-          "lib/FastColoredTextBox.dll": {}
+          "lib/netstandard2.0/Esprima.dll": {}
+        }
+      },
+      "Jint/3.0.0-beta-2034": {
+        "type": "package",
+        "dependencies": {
+          "Esprima": "2.0.3"
+        },
+        "compile": {
+          "lib/netstandard2.1/Jint.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.1/Jint.dll": {}
         }
       }
     }
   },
   "libraries": {
-    "FCTB/2.16.24": {
-      "sha512": "7E+vfTh4kV4Cz9hkHehgbmJQh03EdaMWyjY3T9YA4snqI7Bi11zlAvJgyO5HNdkL+Znzas8yyYE9vuF+izxWQw==",
+    "Esprima/2.0.3": {
+      "sha512": "OC3bLH/ENblaiFx1yCglfMpZDr4iwFXegMldzr3s3PFJq9Pw8c3kqTOIdi6Is+zn8nB79hvAbXnS19ZaaAafCg==",
       "type": "package",
-      "path": "fctb/2.16.24",
+      "path": "esprima/2.0.3",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
-        "fctb.2.16.24.nupkg.sha512",
-        "fctb.nuspec",
-        "lib/FastColoredTextBox.dll",
-        "lib/FastColoredTextBox.xml"
+        "esprima.2.0.3.nupkg.sha512",
+        "esprima.nuspec",
+        "lib/net461/Esprima.dll",
+        "lib/net461/Esprima.xml",
+        "lib/netstandard2.0/Esprima.dll",
+        "lib/netstandard2.0/Esprima.xml"
+      ]
+    },
+    "Jint/3.0.0-beta-2034": {
+      "sha512": "oTYgbK5wt6CrRbYbvOlNrB5+VcRfHa5nhogFctLpbMmQsICWfIbAFoA/OCezpKVOAg4NJnO0SSAIXVmcxs66nQ==",
+      "type": "package",
+      "path": "jint/3.0.0-beta-2034",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "jint.3.0.0-beta-2034.nupkg.sha512",
+        "jint.nuspec",
+        "lib/net461/Jint.dll",
+        "lib/netstandard2.0/Jint.dll",
+        "lib/netstandard2.1/Jint.dll"
       ]
     }
   },
   "projectFileDependencyGroups": {
     "net6.0-windows7.0": [
-      "FCTB >= 2.16.24"
+      "Jint >= 3.0.0-beta-2034"
     ]
   },
   "packageFolders": {
@@ -39,11 +67,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Ricardo\\Github\\Calculator2\\Calculator2\\Calculator2.csproj",
+      "projectUniqueName": "D:\\Users\\ricar\\Documents\\GitHub\\Calculator2\\Calculator2\\Calculator2.csproj",
       "projectName": "Calculator2",
-      "projectPath": "D:\\Ricardo\\Github\\Calculator2\\Calculator2\\Calculator2.csproj",
+      "projectPath": "D:\\Users\\ricar\\Documents\\GitHub\\Calculator2\\Calculator2\\Calculator2.csproj",
       "packagesPath": "C:\\Users\\ricar\\.nuget\\packages\\",
-      "outputPath": "D:\\Ricardo\\Github\\Calculator2\\Calculator2\\obj\\",
+      "outputPath": "D:\\Users\\ricar\\Documents\\GitHub\\Calculator2\\Calculator2\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\ricar\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -72,9 +100,9 @@
       "net6.0-windows7.0": {
         "targetAlias": "net6.0-windows",
         "dependencies": {
-          "FCTB": {
+          "Jint": {
             "target": "Package",
-            "version": "[2.16.24, )"
+            "version": "[3.0.0-beta-2034, )"
           }
         },
         "imports": [
@@ -98,17 +126,5 @@
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.100-rc.1.21458.32\\RuntimeIdentifierGraph.json"
       }
     }
-  },
-  "logs": [
-    {
-      "code": "NU1701",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Package 'FCTB 2.16.24' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8' instead of the project target framework 'net6.0-windows7.0'. This package may not be fully compatible with your project.",
-      "libraryId": "FCTB",
-      "targetGraphs": [
-        "net6.0-windows7.0"
-      ]
-    }
-  ]
+  }
 }

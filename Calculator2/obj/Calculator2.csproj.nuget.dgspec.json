@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Ricardo\\Github\\Calculator2\\Calculator2\\Calculator2.csproj": {}
+    "D:\\Users\\ricar\\Documents\\GitHub\\Calculator2\\Calculator2\\Calculator2.csproj": {}
   },
   "projects": {
-    "D:\\Ricardo\\Github\\Calculator2\\Calculator2\\Calculator2.csproj": {
+    "D:\\Users\\ricar\\Documents\\GitHub\\Calculator2\\Calculator2\\Calculator2.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Ricardo\\Github\\Calculator2\\Calculator2\\Calculator2.csproj",
+        "projectUniqueName": "D:\\Users\\ricar\\Documents\\GitHub\\Calculator2\\Calculator2\\Calculator2.csproj",
         "projectName": "Calculator2",
-        "projectPath": "D:\\Ricardo\\Github\\Calculator2\\Calculator2\\Calculator2.csproj",
+        "projectPath": "D:\\Users\\ricar\\Documents\\GitHub\\Calculator2\\Calculator2\\Calculator2.csproj",
         "packagesPath": "C:\\Users\\ricar\\.nuget\\packages\\",
-        "outputPath": "D:\\Ricardo\\Github\\Calculator2\\Calculator2\\obj\\",
+        "outputPath": "D:\\Users\\ricar\\Documents\\GitHub\\Calculator2\\Calculator2\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\ricar\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -40,9 +40,9 @@
         "net6.0-windows7.0": {
           "targetAlias": "net6.0-windows",
           "dependencies": {
-            "FCTB": {
+            "Jint": {
               "target": "Package",
-              "version": "[2.16.24, )"
+              "version": "[3.0.0-beta-2034, )"
             }
           },
           "imports": [

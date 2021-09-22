@@ -73,6 +73,10 @@
             this.button31 = new System.Windows.Forms.Button();
             this.button32 = new System.Windows.Forms.Button();
             this.button40 = new System.Windows.Forms.Button();
+            this.button41 = new System.Windows.Forms.Button();
+            this.button42 = new System.Windows.Forms.Button();
+            this.button43 = new System.Windows.Forms.Button();
+            this.button44 = new System.Windows.Forms.Button();
             this.FastResult = new FastColoredTextBoxNS.FastColoredTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.FastCode)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.FastCalculation)).BeginInit();
@@ -97,15 +101,18 @@
         '\'',
         '\''};
             this.FastCode.AutoIndentCharsPatterns = "\r\n^\\s*[\\w\\.]+(\\s\\w+)?\\s*(?<range>=)\\s*(?<range>[^;]+);\r\n";
-            this.FastCode.AutoScrollMinSize = new System.Drawing.Size(37, 24);
+            this.FastCode.AutoScrollMinSize = new System.Drawing.Size(53, 24);
             this.FastCode.BackBrush = null;
             this.FastCode.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(49)))), ((int)(((byte)(54)))));
             this.FastCode.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.FastCode.BracketsHighlightStrategy = FastColoredTextBoxNS.BracketsHighlightStrategy.Strategy2;
+            this.FastCode.CaretBlinking = false;
+            this.FastCode.CaretColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.FastCode.CharHeight = 14;
             this.FastCode.CharWidth = 8;
             this.FastCode.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.FastCode.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.FastCode.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.FastCode.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.FastCode.IndentBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(33)))), ((int)(((byte)(36)))));
             this.FastCode.IsReplaceMode = false;
@@ -117,10 +124,12 @@
             this.FastCode.Margin = new System.Windows.Forms.Padding(0);
             this.FastCode.Name = "FastCode";
             this.FastCode.Paddings = new System.Windows.Forms.Padding(5);
+            this.FastCode.ReservedCountOfLineNumberChars = 3;
             this.FastCode.RightBracket = ')';
             this.FastCode.RightBracket2 = '}';
             this.FastCode.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
             this.FastCode.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("FastCode.ServiceColors")));
+            this.FastCode.ShowFoldingLines = true;
             this.FastCode.Size = new System.Drawing.Size(370, 327);
             this.FastCode.TabIndex = 0;
             this.FastCode.Zoom = 100;
@@ -143,16 +152,17 @@
         '\'',
         '\''};
             this.FastCalculation.AutoIndentCharsPatterns = "\r\n^\\s*[\\w\\.]+(\\s\\w+)?\\s*(?<range>=)\\s*(?<range>[^;]+);\r\n";
-            this.FastCalculation.AutoScrollMinSize = new System.Drawing.Size(294, 34);
+            this.FastCalculation.AutoScrollMinSize = new System.Drawing.Size(22, 34);
             this.FastCalculation.BackBrush = null;
             this.FastCalculation.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(49)))), ((int)(((byte)(54)))));
             this.FastCalculation.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.FastCalculation.BracketsHighlightStrategy = FastColoredTextBoxNS.BracketsHighlightStrategy.Strategy2;
+            this.FastCalculation.CaretBlinking = false;
+            this.FastCalculation.CaretColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.FastCalculation.CharHeight = 14;
             this.FastCalculation.CharWidth = 8;
             this.FastCalculation.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.FastCalculation.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
-            this.FastCalculation.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.FastCalculation.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.FastCalculation.IsReplaceMode = false;
             this.FastCalculation.Language = FastColoredTextBoxNS.Language.JS;
@@ -171,7 +181,6 @@
             this.FastCalculation.ShowScrollBars = false;
             this.FastCalculation.Size = new System.Drawing.Size(792, 38);
             this.FastCalculation.TabIndex = 1;
-            this.FastCalculation.Text = "JSON.stringify([1,2,3].join(\"|\"));";
             this.FastCalculation.Zoom = 100;
             this.FastCalculation.KeyDown += new System.Windows.Forms.KeyEventHandler(this.FastCalculation_KeyDown);
             // 
@@ -243,6 +252,10 @@
             this.TableButtonLayout.Controls.Add(this.button31, 5, 1);
             this.TableButtonLayout.Controls.Add(this.button32, 5, 2);
             this.TableButtonLayout.Controls.Add(this.button40, 5, 3);
+            this.TableButtonLayout.Controls.Add(this.button41, 0, 7);
+            this.TableButtonLayout.Controls.Add(this.button42, 1, 7);
+            this.TableButtonLayout.Controls.Add(this.button43, 2, 7);
+            this.TableButtonLayout.Controls.Add(this.button44, 3, 7);
             this.TableButtonLayout.Location = new System.Drawing.Point(2, 115);
             this.TableButtonLayout.Margin = new System.Windows.Forms.Padding(0);
             this.TableButtonLayout.Name = "TableButtonLayout";
@@ -906,7 +919,7 @@
             this.button32.Name = "button32";
             this.button32.Size = new System.Drawing.Size(56, 34);
             this.button32.TabIndex = 33;
-            this.button32.Text = " + \" \" + ";
+            this.button32.Text = " + \"\" + ";
             this.button32.UseVisualStyleBackColor = false;
             // 
             // button40
@@ -927,6 +940,74 @@
             this.button40.TabIndex = 41;
             this.button40.Text = "=";
             this.button40.UseVisualStyleBackColor = false;
+            // 
+            // button41
+            // 
+            this.button41.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(33)))), ((int)(((byte)(36)))));
+            this.button41.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(67)))), ((int)(((byte)(181)))), ((int)(((byte)(129)))));
+            this.button41.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(61)))), ((int)(((byte)(108)))), ((int)(((byte)(80)))));
+            this.button41.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(70)))), ((int)(((byte)(52)))));
+            this.button41.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button41.Font = new System.Drawing.Font("Consolas", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.button41.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(67)))), ((int)(((byte)(181)))), ((int)(((byte)(129)))));
+            this.button41.Location = new System.Drawing.Point(2, 289);
+            this.button41.Margin = new System.Windows.Forms.Padding(2);
+            this.button41.Name = "button41";
+            this.button41.Size = new System.Drawing.Size(56, 34);
+            this.button41.TabIndex = 42;
+            this.button41.Text = "( )";
+            this.button41.UseVisualStyleBackColor = false;
+            // 
+            // button42
+            // 
+            this.button42.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(33)))), ((int)(((byte)(36)))));
+            this.button42.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(67)))), ((int)(((byte)(181)))), ((int)(((byte)(129)))));
+            this.button42.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(61)))), ((int)(((byte)(108)))), ((int)(((byte)(80)))));
+            this.button42.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(70)))), ((int)(((byte)(52)))));
+            this.button42.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button42.Font = new System.Drawing.Font("Consolas", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.button42.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(67)))), ((int)(((byte)(181)))), ((int)(((byte)(129)))));
+            this.button42.Location = new System.Drawing.Point(62, 289);
+            this.button42.Margin = new System.Windows.Forms.Padding(2);
+            this.button42.Name = "button42";
+            this.button42.Size = new System.Drawing.Size(56, 34);
+            this.button42.TabIndex = 43;
+            this.button42.Text = "Log()";
+            this.button42.UseVisualStyleBackColor = false;
+            // 
+            // button43
+            // 
+            this.button43.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(33)))), ((int)(((byte)(36)))));
+            this.button43.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(67)))), ((int)(((byte)(181)))), ((int)(((byte)(129)))));
+            this.button43.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(61)))), ((int)(((byte)(108)))), ((int)(((byte)(80)))));
+            this.button43.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(70)))), ((int)(((byte)(52)))));
+            this.button43.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button43.Font = new System.Drawing.Font("Consolas", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.button43.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(67)))), ((int)(((byte)(181)))), ((int)(((byte)(129)))));
+            this.button43.Location = new System.Drawing.Point(122, 289);
+            this.button43.Margin = new System.Windows.Forms.Padding(2);
+            this.button43.Name = "button43";
+            this.button43.Size = new System.Drawing.Size(56, 34);
+            this.button43.TabIndex = 44;
+            this.button43.Text = "Hex()";
+            this.button43.UseVisualStyleBackColor = false;
+            // 
+            // button44
+            // 
+            this.button44.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(33)))), ((int)(((byte)(36)))));
+            this.button44.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(67)))), ((int)(((byte)(181)))), ((int)(((byte)(129)))));
+            this.button44.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(61)))), ((int)(((byte)(108)))), ((int)(((byte)(80)))));
+            this.button44.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(70)))), ((int)(((byte)(52)))));
+            this.button44.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button44.Font = new System.Drawing.Font("Consolas", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.button44.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(67)))), ((int)(((byte)(181)))), ((int)(((byte)(129)))));
+            this.button44.Location = new System.Drawing.Point(182, 289);
+            this.button44.Margin = new System.Windows.Forms.Padding(2);
+            this.button44.Name = "button44";
+            this.button44.Size = new System.Drawing.Size(56, 34);
+            this.button44.TabIndex = 45;
+            this.button44.Text = "Oct()";
+            this.button44.UseVisualStyleBackColor = false;
             // 
             // FastResult
             // 
@@ -949,10 +1030,13 @@
             this.FastResult.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(49)))), ((int)(((byte)(54)))));
             this.FastResult.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.FastResult.BracketsHighlightStrategy = FastColoredTextBoxNS.BracketsHighlightStrategy.Strategy2;
+            this.FastResult.CaretBlinking = false;
+            this.FastResult.CaretColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.FastResult.CharHeight = 14;
             this.FastResult.CharWidth = 8;
             this.FastResult.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.FastResult.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.FastResult.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.FastResult.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.FastResult.IsReplaceMode = false;
             this.FastResult.Language = FastColoredTextBoxNS.Language.JS;
@@ -980,6 +1064,7 @@
             this.Controls.Add(this.FastCode);
             this.Controls.Add(this.FastCalculation);
             this.Controls.Add(this.TableButtonLayout);
+            this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.Name = "FrmMain";
             this.Text = "Calculator 2 - Ricardo de Roode";
@@ -1038,6 +1123,10 @@
         private System.Windows.Forms.Button button39;
         private System.Windows.Forms.Button button40;
         private FastColoredTextBoxNS.FastColoredTextBox FastResult;
+        private System.Windows.Forms.Button button41;
+        private System.Windows.Forms.Button button42;
+        private System.Windows.Forms.Button button43;
+        private System.Windows.Forms.Button button44;
     }
 }
 

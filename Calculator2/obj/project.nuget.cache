@@ -1,21 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "WwYR5Ot36r+0y3mwQ3/glNgiGWAGp9YvJZhpNHlo/BfzVnU5IzuRRJPR15Be8x9A5NqUu2GxuksiuYGc2jKaJA==",
+  "dgSpecHash": "wvM1JT4vPLZ88RC7gY814nF/9rDDmYSHSdSKsLrVmlR2+OOgmwRk+6f6Db1n3c7aSmOU46xIkrWhZ46M6HuQiQ==",
   "success": true,
-  "projectFilePath": "D:\\Ricardo\\Github\\Calculator2\\Calculator2\\Calculator2.csproj",
+  "projectFilePath": "D:\\Users\\ricar\\Documents\\GitHub\\Calculator2\\Calculator2\\Calculator2.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\ricar\\.nuget\\packages\\fctb\\2.16.24\\fctb.2.16.24.nupkg.sha512"
+    "C:\\Users\\ricar\\.nuget\\packages\\esprima\\2.0.3\\esprima.2.0.3.nupkg.sha512",
+    "C:\\Users\\ricar\\.nuget\\packages\\jint\\3.0.0-beta-2034\\jint.3.0.0-beta-2034.nupkg.sha512"
   ],
-  "logs": [
-    {
-      "code": "NU1701",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Package 'FCTB 2.16.24' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8' instead of the project target framework 'net6.0-windows7.0'. This package may not be fully compatible with your project.",
-      "libraryId": "FCTB",
-      "targetGraphs": [
-        "net6.0-windows7.0"
-      ]
-    }
-  ]
+  "logs": []
 }
