@@ -4,12 +4,20 @@ using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Resources;
+using System.Security.Policy;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Calculator2.AutoCompleteItems;
+using Esprima;
+using Esprima.Ast;
 using FastColoredTextBoxNS;
+using Jint;
 using Jint.Native;
 using Jint.Runtime;
 using Range = FastColoredTextBoxNS.Range;
@@ -21,23 +29,36 @@ namespace Calculator2
 
         private Jint.Engine engine = null;
 
+
+        private string scriptFolder = "";
+
+
         public FrmMain()
         {
             InitializeComponent();
 
+            scriptFolder = AppDomain.CurrentDomain.BaseDirectory + "\\Scripts\\";
         }
 
         //private TextStyle keywordStyle = new TextStyle(Brushes.Red, null, FontStyle.Regular);
 
+
+        private string globalJavascriptKeywords = @"Math|RegExp";
+        private string arrayKeywords = @"map|filter|indexOf|pop|push|keys|join
+|reduce|reduceRight|reverse|shift|slice|some|sort|splice|toString|unshift|values|forEach|flat
+|findIndex|find|every|entries|concat|copyWithin";
+        private string stringKeywords = @"charAt|charCodeAt|concat|fromCharcode|indexOf|lastIndexOf|replace|search|slice|split|substr|substring|toLowerCase|toUpperCase|includes|endsWith|repeat|valueOf|trim";
+
         private List<TextStyle> textStyles = new List<TextStyle>()
         {
+            new TextStyle(new SolidBrush(Color.FromArgb(87,166,74)), null, FontStyle.Regular),
             new TextStyle(new SolidBrush(Color.FromArgb(60, 140, 255)), null, FontStyle.Regular),
             new TextStyle(new SolidBrush(Color.FromArgb(255, 126, 0)), null, FontStyle.Regular),
             new TextStyle(new SolidBrush(Color.FromArgb(67,129,181)), null, FontStyle.Regular),
             new TextStyle(new SolidBrush(Color.FromArgb(191, 112, 0)), null, FontStyle.Regular),
             new TextStyle(new SolidBrush(Color.FromArgb(170, 98, 255)), null, FontStyle.Regular),
             new TextStyle(new SolidBrush(Color.FromArgb(0, 200, 242)), null, FontStyle.Regular),
-            new TextStyle(new SolidBrush(Color.FromArgb(114,218,137)), null, FontStyle.Regular),
+            new TextStyle(new SolidBrush(Color.FromArgb(220,220,170)), null, FontStyle.Regular),
             new TextStyle(new SolidBrush(Color.FromArgb(128,128,128)), null, FontStyle.Regular),
             new TextStyle(new SolidBrush(Color.FromArgb(240,71,71)), null, FontStyle.Regular),
 
@@ -51,28 +72,21 @@ namespace Calculator2
             Color.FromArgb(255,20,147  ),
             Color.FromArgb(154,205,50  ),
             Color.FromArgb(148,0,211   ),
-            Color.FromArgb(105,105,105 ),
             Color.FromArgb(65,105,225  ),
-            Color.FromArgb(220,20,60   ),
             Color.FromArgb(0,206,209   ),
-            Color.FromArgb(0,128,0     )
+            Color.FromArgb(0,128,0     ),
+            Color.FromArgb(220,20,60   ),
+            Color.FromArgb(105,105,105 ),
         }).Select(x => new TextStyle(new SolidBrush(x), null, FontStyle.Bold)).ToList();
 
 
-        private MarkerStyle bracketMarkerStyle = new MarkerStyle(new SolidBrush(Color.FromArgb(50,255,255,255)));
+        private MarkerStyle bracketMarkerStyle = new MarkerStyle(new SolidBrush(Color.FromArgb(50, 255, 255, 255)));
+
+        private List<string> customFunctionNames = new List<string>();
+
 
         private void FrmMain_Load(object sender, EventArgs e)
         {
-
-
-
-            //JavascriptEvaluator.JavascriptEvaluator javascriptEvaluator = null;
-
-
-            //javascriptEvaluator = new JavascriptEvaluator.JavascriptEvaluator();
-
-            //engine = new ScriptEngine("{16d51579-a30b-4c8b-a276-0ff4dc41e755}");
-
             engine = new Jint.Engine();
 
             foreach (Button button in TableButtonLayout.Controls.OfType<Button>())
@@ -84,53 +98,216 @@ namespace Calculator2
                 button.Margin = new Padding(2);
             }
 
-            FastColoredTextBox[] textBoxes = new FastColoredTextBox[]
+            InitializeAutoComplete();
+
+            InitializeTextBox(FastCode, true);
+            InitializeTextBox(FastResult, false);
+            InitializeTextBox(FastCalculation, false);
+
+            //FastCalculation.Text = @"[1,2,3].join("" | "")";
+            FastCalculation.Text = @"bla2()";
+
+            FilePage filePage = new FilePage()
             {
-                FastCode, FastResult, FastCalculation
+                Page = TabPage1,
+                Name = "ScriptCode",
+                Contents = "",
+                TextBox = FastCode,
             };
 
-            foreach (var box in textBoxes)
+            fileContents.Add(filePage);
+
+            FastCode.TextChangedDelayed += (_, __) =>
             {
-                criteriaStyleRainbow.ForEach(x => box.AddStyle(x));
-                textStyles.ForEach(x => box.AddStyle(x));
+                filePage.CodeLineLength = filePage.TextBox.LinesCount;
+            };
 
 
-                box.SyntaxHighlighter.KeywordStyle = textStyles[4]; //done
-                box.SyntaxHighlighter.StringStyle = textStyles[1]; //done
-                box.SyntaxHighlighter.VariableStyle = textStyles[5]; //done, not sure
-                box.SyntaxHighlighter.TypesStyle = textStyles[4];
-                box.SyntaxHighlighter.FunctionsStyle = textStyles[2]; //done
-                box.SyntaxHighlighter.ClassNameStyle = textStyles[3]; //done
-                box.SyntaxHighlighter.CommentStyle = textStyles[7]; //done
-                box.SyntaxHighlighter.NumberStyle = textStyles[8];
+            FastCalculation.MouseWheel += FastCalculation_MouseWheel;
 
-                box.BracketsStyle = bracketMarkerStyle;
+            operatorRegex = new Regex(@"[\*\+\/\=\-\,]", RegexOptions.Compiled);
 
-                box.BracketsHighlightStrategy = BracketsHighlightStrategy.Strategy2;
+            LoadFiles();
+        }
 
-                box.TextChangedDelayed += FastColoredTextBox_TextChangedDelayed;
-                //box.MouseWheel += FastCode_MouseWheel;
+        private void FastCalculation_MouseWheel(object? sender, MouseEventArgs e)
+        {
+            if (e.Delta > 0)
+            {
+                FastCalculation.SelectionStart--;
+                FastCalculation.SelectionLength = 0;
+            }
+            else
+            {
+                FastCalculation.SelectionStart++;
+                FastCalculation.SelectionLength = 0;
+            }
+        }
+
+        private Regex JScriptKeywordRegex = null;
+        private Regex operatorRegex = null;
+
+
+        private void InitializeTextBox(FastColoredTextBox textBox, bool multiline = false)
+        {
+            if (multiline)
+            {
+                textBox.Anchor = (((AnchorStyles.Top | AnchorStyles.Bottom) | AnchorStyles.Left) | AnchorStyles.Right);
+                textBox.AutoIndentCharsPatterns = "\r\n^\\s*[\\w\\.]+(\\s\\w+)?\\s*(?<range>=)\\s*(?<range>[^;]+);\r\n";
+                textBox.AutoScrollMinSize = new Size(53, 24);
+                textBox.BackBrush = null;
+                textBox.BackColor = Color.FromArgb(46, 49, 54);
+                textBox.BorderStyle = BorderStyle.FixedSingle;
+                textBox.BracketsHighlightStrategy = BracketsHighlightStrategy.Strategy2;
+                textBox.CaretBlinking = false;
+                textBox.CaretColor = Color.FromArgb(224, 224, 224);
+                textBox.CharHeight = 14;
+                textBox.CharWidth = 8;
+                textBox.IndentBackColor = Color.FromArgb(30, 33, 36);
+                textBox.Location = new Point(0, -1);
+                textBox.Paddings = new Padding(5);
+
+            }
+
+            textBox.ShowFoldingLines = multiline;
+            textBox.LeftBracket = '(';
+            textBox.LeftBracket2 = '{';
+            textBox.LineNumberColor = Color.Gray;
+            textBox.Margin = new Padding(0);
+            textBox.ReservedCountOfLineNumberChars = 3;
+            textBox.RightBracket = ')';
+            textBox.RightBracket2 = '}';
+            textBox.SelectionColor = Color.FromArgb(60, 0, 0, 255);
+            textBox.ServiceLinesColor = SystemColors.WindowFrame;
+            textBox.TabIndex = 0;
+            textBox.Zoom = 100;
+
+            textBox.Font = new Font("Cascadia Mono", 10F, FontStyle.Regular, GraphicsUnit.Point);
+            textBox.ForeColor = Color.FromArgb(224, 224, 224);
+            textBox.AutoCompleteBracketsList = new char[] { '(', ')', '{', '}', '[', ']', '\"', '\"', '\'', '\'' };
+            textBox.IsReplaceMode = false;
+            textBox.Language = Language.JS;
+
+
+            criteriaStyleRainbow.ForEach(x => textBox.AddStyle(x));
+            textStyles.ForEach(x => textBox.AddStyle(x));
+
+            textBox.AddStyle(criteriaStyleWavyLine);
+
+            textBox.SyntaxHighlighter.KeywordStyle = textStyles[3]; //done
+            textBox.SyntaxHighlighter.StringStyle = textStyles[2]; //done
+            textBox.SyntaxHighlighter.VariableStyle = textStyles[6]; //done, not sure
+            textBox.SyntaxHighlighter.TypesStyle = textStyles[3]; //done
+            textBox.SyntaxHighlighter.FunctionsStyle = textStyles[3]; //done
+            textBox.SyntaxHighlighter.ClassNameStyle = textStyles[4]; //done
+            textBox.SyntaxHighlighter.CommentStyle = textStyles[0]; //done
+            textBox.SyntaxHighlighter.NumberStyle = textStyles[9];
+
+            textBox.BracketsStyle = bracketMarkerStyle;
+            textBox.BracketsHighlightStrategy = BracketsHighlightStrategy.Strategy2;
+            textBox.TextChangedDelayed += FastColoredTextBox_TextChangedDelayed;
+
+            textBox.ServiceColors.ExpandMarkerBackColor = Color.FromArgb(30, 33, 36);
+            textBox.ServiceColors.CollapseMarkerBackColor = Color.FromArgb(30, 33, 36);
+
+            AutocompleteMenu autocompleteMenu = new AutocompleteMenu(textBox)
+            {
+                MinFragmentLength = 1,
+                AllowTabKey = true,
+                AppearInterval = 1,
+                SearchPattern = @"([\w\.\[\], ])",
+                MinimumSize = new Size(200, 200),
+                AlwaysShowTooltip = true,
+                ToolTipDuration = 1000000,
+            };
+
+            autocompleteMenu.Items.SetAutocompleteItems(autocompleteItems);
+        }
+
+
+        private class FilePage
+        {
+            public string Contents { get; set; }
+            public string Name { get; set; }
+            public TabPage Page { get; set; }
+
+            public FastColoredTextBox TextBox { get; set; }
+
+            public int CodeLineLength { get; set; }
+        }
+
+        private List<FilePage> fileContents = new List<FilePage>();
+
+
+        private void LoadFiles()
+        {
+
+
+            if (!Directory.Exists(scriptFolder))
+            {
+                Directory.CreateDirectory(scriptFolder);
+            }
+
+            string[] files = Directory.GetFiles(scriptFolder, "*.js");
+
+            for (int i = fileContents.Count - 1; i > 0; i--)
+            {
+                CustomTabControl.TabPages.Remove(fileContents[i].Page);
+                fileContents[i].Page.Controls.Remove(fileContents[i].TextBox);
+                fileContents[i].TextBox.Dispose();
+                fileContents[i].Page.Dispose();
+                fileContents.RemoveAt(i);
+            }
+
+            int itemCount = fileContents.Count - 1;
+            int index = 0;
+
+            foreach (var file in files)
+            {
+                if (index > itemCount)
+                {
+                    TabPage page = new TabPage();
+                    FastColoredTextBox fastColoredTextBox = new FastColoredTextBox();
+                    FilePage filePage = new FilePage()
+                    {
+                        Page = page,
+                        Name = Path.GetFileName(file),
+                        Contents = File.ReadAllText(file),
+                        TextBox = fastColoredTextBox,
+                    };
+
+                    page.Text = filePage.Name;
+
+                    InitializeTextBox(fastColoredTextBox, true);
+
+                    fileContents.Add(filePage);
+
+                    page.Controls.Add(fastColoredTextBox);
+                    fastColoredTextBox.Bounds = new Rectangle(0, -1, page.Width, page.Height + 1);
+                    fastColoredTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right | AnchorStyles.Left;
+
+                    CustomTabControl.TabPages.Add(page);
+
+                    fastColoredTextBox.TextChangedDelayed += (_, __) =>
+                    {
+                        filePage.CodeLineLength = filePage.TextBox.LinesCount;
+                    };
+                }
+                else
+                {
+                    fileContents[index].Name = Path.GetFileName(file);
+                    fileContents[index].Contents = File.ReadAllText(file);
+                    fileContents[index].Page.Text = fileContents[index].Name;
+                }
+
+                fileContents[index].TextBox.Text = fileContents[index].Contents;
+
+                index++;
             }
 
 
+            CalculateFunctionNames();
 
-            FastCalculation.Text = @"[1,2,3].join("" | "")";
-
-
-            var stringBuild = new StringBuilder();
-            //            stringBuild.AppendLine("var JSON;JSON||(JSON={}),(function(){\"use strict\";function i(n){return n<10?\"0\"+n:n}function f(n){return o.lastIndex=0,o.test(n)?'\"'+n.replace(o,function(n){var t=s[n];return typeof t==\"string\"?t:\"\\\\u\"+(\"0000\"+n.charCodeAt(0).toString(16)).slice(-4)})+'\"':'\"'+n+'\"'}function r(i,e){var h,l,c,a,v=n,s,o=e[i];o&&typeof o==\"object\"&&typeof o.toJSON==\"function\"&&(o=o.toJSON(i)),typeof t==\"function\"&&(o=t.call(e,i,o));switch(typeof o){case\"string\":return f(o);case\"number\":return isFinite(o)?String(o):\"null\";case\"boolean\":case\"null\":return String(o);case\"object\":if(!o)return\"null\";n+=u,s=[];if(Object.prototype.toString.apply(o)===\"[object Array]\"){for(a=o.length,h=0;h<a;h+=1)s[h]=r(h,o)||\"null\";return c=s.length===0?\"[]\":n?\"[\\n\"+n+s.join(\",\\n\"+n)+\"\\n\"+v+\"]\":\"[\"+s.join(\",\")+\"]\",n=v,c}if(t&&typeof t==\"object\")for(a=t.length,h=0;h<a;h+=1)typeof t[h]==\"string\"&&(l=t[h],c=r(l,o),c&&s.push(f(l)+(n?\": \":\":\")+c));else for(l in o)Object.prototype.hasOwnProperty.call(o,l)&&(c=r(l,o),c&&s.push(f(l)+(n?\": \":\":\")+c));return c=s.length===0?\"{}\":n?\"{\\n\"+n+s.join(\",\\n\"+n)+\"\\n\"+v+\"}\":\"{\"+s.join(\",\")+\"}\",n=v,c}}typeof Date.prototype.toJSON!=\"function\"&&(Date.prototype.toJSON=function(){return isFinite(this.valueOf())?this.getUTCFullYear()+\"-\"+i(this.getUTCMonth()+1)+\"-\"+i(this.getUTCDate())+\"T\"+i(this.getUTCHours())+\":\"+i(this.getUTCMinutes())+\":\"+i(this.getUTCSeconds())+\"Z\":null},String.prototype.toJSON=Number.prototype.toJSON=Boolean.prototype.toJSON=function(){return this.valueOf()});var e=/[\\u0000\\u00ad\\u0600-\\u0604\\u070f\\u17b4\\u17b5\\u200c-\\u200f\\u2028-\\u202f\\u2060-\\u206f\\ufeff\\ufff0-\\uffff]/g,o=/[\\\\\\\"\\x00-\\x1f\\x7f-\\x9f\\u00ad\\u0600-\\u0604\\u070f\\u17b4\\u17b5\\u200c-\\u200f\\u2028-\\u202f\\u2060-\\u206f\\ufeff\\ufff0-\\uffff]/g,n,u,s={\"\\b\":\"\\\\b\",\"\\t\":\"\\\\t\",\"\\n\":\"\\\\n\",\"\\f\":\"\\\\f\",\"\\r\":\"\\\\r\",'\"':'\\\\\"',\"\\\\\":\"\\\\\\\\\"},t;typeof JSON.stringify!=\"function\"&&(JSON.stringify=function(i,f,e){var o;n=\"\",u=\"\";if(typeof e==\"number\")for(o=0;o<e;o+=1)u+=\" \";else typeof e==\"string\"&&(u=e);t=f;if(f&&typeof f!=\"function\"&&(typeof f!=\"object\"||typeof f.length!=\"number\"))throw new Error(\"JSON.stringify\");return r(\"\",{\"\":i})}),typeof JSON.parse!=\"function\"&&(JSON.parse=function(n,t){function r(n,i){var f,e,u=n[i];if(u&&typeof u==\"object\")for(f in u)Object.prototype.hasOwnProperty.call(u,f)&&(e=r(u,f),e!==undefined?u[f]=e:delete u[f]);return t.call(n,i,u)}var i;n=String(n),e.lastIndex=0,e.test(n)&&(n=n.replace(e,function(n){return\"\\\\u\"+(\"0000\"+n.charCodeAt(0).toString(16)).slice(-4)}));if(/^[\\],:{}\\s]*$/.test(n.replace(/\\\\(?:[\"\\\\\\/bfnrt]|u[0-9a-fA-F]{4})/g,\"@\").replace(/\"[^\"\\\\\\n\\r]*\"|true|false|null|-?\\d+(?:\\.\\d*)?(?:[eE][+\\-]?\\d+)?/g,\"]\").replace(/(?:^|:|,)(?:\\s*\\[)+/g,\"\")))return i=eval(\"(\"+n+\")\"),typeof t==\"function\"?r({\"\":i},\"\"):i;throw new SyntaxError(\"JSON.parse\");})})()");
-
-            //            stringBuild.AppendLine(@"
-            //if(test){
-            //    for(var i = 0; i < 10; i++){
-            //           Log(""Something {}"");
-            //    }
-            //}
-
-
-            //");
-
-            FastCode.Text = stringBuild.ToString();
         }
 
         private void FastCode_MouseWheel(object? sender, MouseEventArgs e)
@@ -145,7 +322,35 @@ namespace Calculator2
         {
             if (sender is null) return;
 
+
+            int selectStart;
+            int selectLength;
+            string selectedText;
+
             Button button = (Button)sender;
+
+            if (button.Tag != null && button.Tag is string s && s.Length > 0)
+            {
+                string[] tagParts = s.Split('|');
+                if (tagParts.Length != 2)
+                {
+                    MessageBox.Show("Button Tag should have a single '|' character!");
+
+                    FastCalculation.Focus();
+                    return;
+                }
+                selectStart = FastCalculation.SelectionStart;
+                selectedText = FastCalculation.SelectedText;
+                FastCalculation.SelectedText = tagParts[0] + FastCalculation.SelectedText + tagParts[1];
+
+                FastCalculation.SelectionStart = selectStart + tagParts[0].Length + selectedText.Length;
+                FastCalculation.SelectionLength = 0;
+                FastCalculation.Refresh();
+
+                FastCalculation.Focus();
+
+                return;
+            }
 
             switch (button.Text)
             {
@@ -159,61 +364,162 @@ namespace Calculator2
                 case "7":
                 case "8":
                 case "9":
+                case ".":
+                case ",":
                 case "+":
                 case "-":
                 case "*":
                 case "/":
                 case " + \"\" + ":
+                case "(":
+                case ")":
+                case "[":
+                case "]":
+                case "!":
+                case "&":
+                case "|":
                     FastCalculation.InsertText(button.Text);
                     break;
 
+                case "⎵":
+                    FastCalculation.InsertText(" ");
+                    break;
+
                 case "=":
-
                     ExecuteCode();
-
                     break;
 
                 case "( )":
-                    int selectStart = FastCalculation.SelectionStart;
-                    int selectLength = FastCalculation.SelectionLength;
-                    FastCalculation.SelectedText = "(" + FastCalculation.SelectedText + ")";
-                    FastCalculation.SelectionStart = selectStart;
-                    FastCalculation.SelectionLength = selectLength + 2;
+                case "[ ]":
+                case "\" \"":
+                    selectStart = FastCalculation.SelectionStart;
+                    selectLength = FastCalculation.SelectionLength;
+                    selectedText = FastCalculation.SelectedText;
+                    FastCalculation.SelectedText = button.Text.First() + selectedText + button.Text.Last();
+                    if (selectLength > 0)
+                    {
+                        FastCalculation.SelectionStart = selectStart;
+                        FastCalculation.SelectionLength = selectLength + 2;
+                    }
+                    else
+                    {
+                        FastCalculation.SelectionStart = selectStart + 2 + selectedText.Length;
+                        FastCalculation.SelectionLength = 0;
+                    }
+                    FastCalculation.Refresh();
+                    break;
 
+                case "<-":
+                    FastCalculation.InsertText("\b");
+                    //FastCalculation.HotkeysMapping.Add(Keys.Back, FCTBAction.);
+                    FastCalculation.Refresh();
+                    break;
+
+                case "Clear":
+                    FastCalculation.Text = "";
+                    break;
+
+                case "<":
+                    FastCalculation.SelectionStart--;
+                    FastCalculation.Refresh();
+                    break;
+
+                case ">":
+                    FastCalculation.SelectionStart++;
+                    FastCalculation.Refresh();
+                    break;
+
+                case "<<":
+                    FastCalculation.SelectionStart = 0;
+                    FastCalculation.Refresh();
+                    break;
+
+                case ">>":
+                    FastCalculation.SelectionStart = FastCalculation.Lines[0].Length;
+                    FastCalculation.Refresh();
                     break;
 
             }
 
 
+            FastCalculation.Focus();
+
         }
+
+
+        private void CalculateFunctionNames()
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+
+            foreach (FilePage filePage in fileContents)
+            {
+                filePage.CodeLineLength = filePage.TextBox.LinesCount;
+                stringBuilder.AppendLine(filePage.TextBox.Text);
+                filePage.TextBox.Range.ClearStyle(criteriaStyleWavyLine);
+            }
+
+            var parser = new JavaScriptParser($"{stringBuilder} return JSON.stringify({FastCalculation.Text});");
+
+            try
+            {
+                var script = parser.ParseScript();
+
+                var newCustomFunctionNames = script.ChildNodes.OfType<FunctionDeclaration>().Select(x => x.Id?.Name).Where(x => x != null).OrderBy(x => x).ToList();
+
+                //keep track of the array objects and add some functionality to the autocomplete menu
+                string arrayObjects = string.Join('|', script.ChildNodes.OfType<VariableDeclaration>().Where(x => (((VariableDeclarator)x.ChildNodes[0]).Init?.Type ?? Nodes.WhileStatement) == Nodes.ArrayExpression).Select(x => ((Identifier)((VariableDeclarator)x.ChildNodes[0]).Id).Name ?? "").ToArray());
+                autocompleteArrayObjects.ForEach(x => x.SetObjectText(arrayObjects));
+
+
+                //we have a new function or something got renamed, now we need to refresh the regex for the user functions and refresh the textboxes
+                if (!Enumerable.SequenceEqual(newCustomFunctionNames, customFunctionNames))
+                {
+                    JScriptKeywordRegex = new Regex(@"\b(" + stringKeywords + "|" + globalJavascriptKeywords + "|" + arrayKeywords + (newCustomFunctionNames.Count == 0 ? "" : "|" + string.Join('|', newCustomFunctionNames)) + @")\b", RegexOptions.Compiled);
+                    foreach (var filePage in fileContents)
+                    {
+                        filePage.TextBox.OnTextChanged();
+                    }
+                    FastResult.OnTextChanged();
+                    FastCalculation.OnTextChanged();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return;
+            }
+
+        }
+
 
         private void ExecuteCode()
         {
 
             Stopwatch stopwatch = Stopwatch.StartNew();
 
+            int lineStart = 0;
+            int lineEnd = 0;
+            int columnStart = 0;
+            int columnEnd = 0;
+            string errorMessage = "";
+
             try
             {
-                //object result = engine.Parse(
-                //    FastCode.Text + "\r\n" +
-                //    FastCalculation.Text);
+                StringBuilder stringBuilder = new StringBuilder();
 
-                //if(result is null)
-                //{
-                //    FastResult.Text = $"[{engine.Site.LastException.Line}, {engine.Site.LastException.Column}]" + engine.Site.LastException.Description;
-                //}
-                //else
-                //{
-                //    FastResult.Text = result.ToString();
-                //}
+                foreach (FilePage filePage in fileContents)
+                {
+                    filePage.CodeLineLength = filePage.TextBox.LinesCount;
+                    stringBuilder.AppendLine(filePage.TextBox.Text);
+                    filePage.TextBox.Range.ClearStyle(criteriaStyleWavyLine);
+                }
 
-                JsValue result = engine.Evaluate(
-                    FastCode.Text + "\r\n" +
-                    "return JSON.stringify(" + FastCalculation.Text + ");");
+                JsValue result = engine.Evaluate($"{stringBuilder} return JSON.stringify({FastCalculation.Text});");
+
+                //JsValue result = engine.Evaluate(script);
 
                 if (result is null)
                 {
-
                     //FastResult.Text = $"[{engine.Site.LastException.Line}, {engine.Site.LastException.Column}]" + engine.Site.LastException.Description;
                 }
                 else
@@ -222,18 +528,49 @@ namespace Calculator2
 
                 }
 
+                return;
+
             }
             catch (JavaScriptException jex)
             {
-                FastResult.Text = $"[{jex.LineNumber}, {jex.Column}] {jex.Message}";
+                lineStart = jex.Location.Start.Line;
+                lineEnd = jex.Location.End.Line;
+                columnStart = jex.Location.Start.Column;
+                columnEnd = jex.Location.End.Column;
+                errorMessage = jex.Message;
             }
-
-
+            catch (ParserException pex)
+            {
+                lineStart = pex.LineNumber;
+                lineEnd = pex.LineNumber;
+                columnStart = pex.Column;
+                columnEnd = pex.Column + 1;
+                errorMessage = pex.Description ?? "";
+            }
             catch (Exception ex)
             {
-                FastResult.Text = ex.Message;
-
+                FastResult.Text = $"[Error] {ex.Message}";
+                return;
             }
+
+
+            int lineOffset = 0;
+
+            for (int i = 0; i < fileContents.Count; i++)
+            {
+                if (lineStart - lineOffset < fileContents[i].CodeLineLength)
+                {
+                    new Range(fileContents[i].TextBox, columnStart, lineStart - lineOffset - 1, columnEnd, lineEnd - lineOffset - 1).SetStyle(criteriaStyleWavyLine);
+                    FastResult.Text = $"[Error at {fileContents[i].Name}:{lineStart - lineOffset}, {columnStart}] {errorMessage}";
+
+                    return;
+                }
+
+                lineOffset += fileContents[i].CodeLineLength;
+            }
+
+            new Range(FastCalculation, columnStart, lineStart - lineOffset - 1, columnEnd, lineEnd - lineOffset - 1).SetStyle(criteriaStyleWavyLine);
+            FastResult.Text = $"[Error at {lineStart - lineOffset}, {columnStart}] {errorMessage}";
         }
 
         private void FastCalculation_KeyDown(object sender, KeyEventArgs e)
@@ -245,15 +582,6 @@ namespace Calculator2
             }
         }
 
-        private void FastCode_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void FastCode_VisibleChanged(object sender, EventArgs e)
-        {
-
-        }
 
         private void FastColoredTextBox_TextChangedDelayed(object? sender, TextChangedEventArgs e)
         {
@@ -263,13 +591,17 @@ namespace Calculator2
 
             Range range = textBox.Range;
 
+            if (JScriptKeywordRegex != null) range.SetStyle(textStyles[7], JScriptKeywordRegex);
 
 
+            range.SetStyle(textStyles[9], operatorRegex);
             range.ClearStyle(criteriaStyleRainbow.ToArray());
 
-            FastColoredTextBoxNS.StyleIndex[] styleIndexes = criteriaStyleRainbow.Select(x => (FastColoredTextBoxNS.StyleIndex)textBox.GetStyleIndexMask(new FastColoredTextBoxNS.Style[] { x })).ToArray();
 
-            FastColoredTextBoxNS.StyleIndex styleMask = textBox.GetStyleIndexMask(textStyles.ToArray());
+
+            StyleIndex[] styleIndexes = criteriaStyleRainbow.Select(x => textBox.GetStyleIndexMask(new Style[] { x })).ToArray();
+
+            StyleIndex styleMask = textBox.GetStyleIndexMask(textStyles.ToArray());
 
             char[] openingChars = new char[] { '(', '{', '[' };
             char[] closingChars = new char[] { ')', '}', ']' };
@@ -337,5 +669,121 @@ namespace Calculator2
             return Math.Max(range.End.iChar, range.Start.iChar);
         }
 
+        private void visualStudioTabControl1_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+
+        }
+
+        private void FastCode_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyData == (Keys.Control | Keys.S))
+            {
+                e.Handled = true;
+
+                SaveFiles();
+            }
+        }
+
+        private void SaveFiles()
+        {
+            foreach (FilePage filePage in fileContents)
+            {
+                filePage.Contents = filePage.TextBox.Text;
+
+                try
+                {
+                    File.WriteAllText(scriptFolder + filePage.Name, filePage.Contents);
+                }
+                catch (Exception ex)
+                {
+                    PrintResult($"Could not save {filePage.Name}", ex);
+                }
+            }
+
+            CalculateFunctionNames();
+        }
+
+
+        private void PrintResult(string text, Exception ex)
+        {
+            if (ex == null)
+            {
+                FastResult.Text = text;
+            }
+            else
+            {
+                FastResult.Text = $"Error: {ex.Message}: {text}";
+            }
+        }
+
+        private void helpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(@"This calculator is made by Ricardo de Roode.
+
+This code may be used for your own projects, but you may not sell the program, or parts of it, without permission of the owner of this software. 
+
+When using it for your own projects, make sure to give proper credit where needed.", "About", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void githubToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var psi = new ProcessStartInfo
+            {
+                FileName = "https://github.com/Jucko13/Calculator2",
+                UseShellExecute = true
+            };
+            Process.Start(psi);
+
+        }
+
+
+        private List<AutocompleteItem> autocompleteItems = null;
+        private List<ObjectPropertyAutoComplete> autocompleteArrayObjects = null;
+        private void InitializeAutoComplete()
+        {
+
+            autocompleteItems = new List<AutocompleteItem>
+            {
+                new AutocompleteItemTrim("JSON.Stringify()")
+                {
+                    ToolTipText = "Converts any object to a readable string",
+                    ToolTipTitle = "JSON.Stringify(value: object) : " + typeof(string).Name
+                }
+            };
+
+            new List<string> { "PI", "E", "LN2", "LN10", "LOG2E", "LOG10E", "SQRT1_2", "SQRT2", "abs()", "acos()", "acosh()", "asinh()", "atan()", "atanh()", "atan2()",
+                "cbrt()", "ceil()", "clz32()", "cos()", "cosh()", "exp()", "expm1()", "floor()", "fround()", "hypot()", "imul()", "log()", "log1p()", "log10()",
+                "log2()", "max()", "min()", "pow()", "random()", "round()", "sign()", "sin()", "sinh()", "sqrt()", "tan()", "tanh()", "trunc()"}
+            .ForEach(x => autocompleteItems.Add(new ObjectPropertyAutoComplete(x, "Math"))); //x.Replace("()", "")
+
+
+            autocompleteArrayObjects = new List<ObjectPropertyAutoComplete>();
+
+            autocompleteArrayObjects.AddRange(arrayKeywords.Split('|').Select(y => new ObjectPropertyAutoComplete(y, @"\/")));
+
+            //autocompleteArrayObjects.AddRange(arrayKeywords.Split('|').SelectMany(x =>
+            //{
+            //    return ;
+            //}));
+
+            autocompleteItems.AddRange(autocompleteArrayObjects);
+
+            autocompleteItems = autocompleteItems.OrderBy(x => x.ToolTipTitle).ToList();
+        }
+
+        private void saveScriptsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SaveFiles();
+        }
+
+        private void reloadScriptsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            LoadFiles();
+        }
+
+        private void FrmMain_Resize(object sender, EventArgs e)
+        {
+            CustomTabControl.Visible = CustomTabControl.Width > 20;
+        }
     }
 }
