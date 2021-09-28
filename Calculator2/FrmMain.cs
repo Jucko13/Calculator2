@@ -14,6 +14,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Calculator2.AutoCompleteItems;
+using Calculator2.Properties;
 using Esprima;
 using Esprima.Ast;
 using FastColoredTextBoxNS;
@@ -37,7 +38,7 @@ namespace Calculator2
         {
             InitializeComponent();
 
-            scriptFolder = AppDomain.CurrentDomain.BaseDirectory + "\\Scripts\\";
+            scriptFolder = AppDomain.CurrentDomain.BaseDirectory + "Scripts\\";
         }
 
         //private TextStyle keywordStyle = new TextStyle(Brushes.Red, null, FontStyle.Regular);
@@ -85,11 +86,10 @@ namespace Calculator2
         private List<string> customFunctionNames = new List<string>();
 
 
-        private void FrmMain_Load(object sender, EventArgs e)
-        {
-            engine = new Jint.Engine();
 
-            foreach (Button button in TableButtonLayout.Controls.OfType<Button>())
+        private void InitializeButtonsInTableLayout(TableLayoutPanel panel)
+        {
+            foreach (Button button in panel.Controls.OfType<Button>())
             {
                 button.Dock = DockStyle.Fill;
                 button.Click += TableButton_Click;
@@ -97,7 +97,16 @@ namespace Calculator2
                 button.Padding = Padding.Empty;
                 button.Margin = new Padding(2);
             }
+        }
 
+        private void FrmMain_Load(object sender, EventArgs e)
+        {
+            engine = new Jint.Engine();
+
+            InitializeButtonsInTableLayout(TableButtonLayout);
+            InitializeButtonsInTableLayout(TableButtonExtraLayout);
+
+            
             InitializeAutoComplete();
 
             InitializeTextBox(FastCode, true);
@@ -105,7 +114,7 @@ namespace Calculator2
             InitializeTextBox(FastCalculation, false);
 
             //FastCalculation.Text = @"[1,2,3].join("" | "")";
-            FastCalculation.Text = @"bla2()";
+            //FastCalculation.Text = @"bla2()";
 
             FilePage filePage = new FilePage()
             {
@@ -127,7 +136,51 @@ namespace Calculator2
 
             operatorRegex = new Regex(@"[\*\+\/\=\-\,]", RegexOptions.Compiled);
 
+            LoadSettings();
+
             LoadFiles();
+
+        }
+
+        private void LoadSettings()
+        {
+
+            Settings.Default.Upgrade();
+
+            if (Settings.Default.PageOrder == null)
+            {
+                Settings.Default.PageOrder = new string[] { };
+            }
+
+            FastCalculation.Text = Settings.Default.Calculation;
+            FastResult.Text = Settings.Default.Result;
+        }
+
+        private void LoadPageOrder()
+        {
+            var pageOrder = Settings.Default.PageOrder;
+
+            var pages = CustomTabControl.TabPages.OfType<TabPage>().ToList();
+            pages.ForEach(x => CustomTabControl.TabPages.Remove(x));
+
+            var newPageOrder = pageOrder.Select(x => pages.FirstOrDefault(y => y.Text == x)).Where(x => x != null).ToList();
+            newPageOrder = newPageOrder.Concat(pages.Except(newPageOrder)).ToList();
+
+            CustomTabControl.TabPages.AddRange(newPageOrder.ToArray());
+        }
+
+        private void SavePageOrder()
+        {
+            Settings.Default.PageOrder = CustomTabControl.TabPages.OfType<TabPage>().Select(x => x.Text).ToArray();
+        }
+
+        private void SaveSettings()
+        {
+            SavePageOrder();
+            Settings.Default.Calculation = FastCalculation.Text;
+            Settings.Default.Result = FastResult.Text;
+
+            Settings.Default.Save();
         }
 
         private void FastCalculation_MouseWheel(object? sender, MouseEventArgs e)
@@ -229,6 +282,7 @@ namespace Calculator2
         {
             public string Contents { get; set; }
             public string Name { get; set; }
+            public string FilePath { get; set; }
             public TabPage Page { get; set; }
 
             public FastColoredTextBox TextBox { get; set; }
@@ -271,9 +325,10 @@ namespace Calculator2
                     FilePage filePage = new FilePage()
                     {
                         Page = page,
-                        Name = Path.GetFileName(file),
+                        Name = Path.GetFileNameWithoutExtension(file),
                         Contents = File.ReadAllText(file),
                         TextBox = fastColoredTextBox,
+                        FilePath = file,
                     };
 
                     page.Text = filePage.Name;
@@ -295,9 +350,10 @@ namespace Calculator2
                 }
                 else
                 {
-                    fileContents[index].Name = Path.GetFileName(file);
+                    fileContents[index].Name = Path.GetFileNameWithoutExtension(file);
                     fileContents[index].Contents = File.ReadAllText(file);
                     fileContents[index].Page.Text = fileContents[index].Name;
+                    fileContents[index].FilePath = file;
                 }
 
                 fileContents[index].TextBox.Text = fileContents[index].Contents;
@@ -308,6 +364,7 @@ namespace Calculator2
 
             CalculateFunctionNames();
 
+            LoadPageOrder();
         }
 
         private void FastCode_MouseWheel(object? sender, MouseEventArgs e)
@@ -415,7 +472,7 @@ namespace Calculator2
                     FastCalculation.Refresh();
                     break;
 
-                case "Clear":
+                case "C":
                     FastCalculation.Text = "";
                     break;
 
@@ -527,6 +584,8 @@ namespace Calculator2
                     FastResult.Text = result.ToString() + stopwatch.Elapsed.TotalMilliseconds.ToString(" | 0.## ms");
 
                 }
+
+                SaveSettings();
 
                 return;
 
@@ -692,7 +751,7 @@ namespace Calculator2
 
                 try
                 {
-                    File.WriteAllText(scriptFolder + filePage.Name, filePage.Contents);
+                    File.WriteAllText(filePage.FilePath, filePage.Contents);
                 }
                 catch (Exception ex)
                 {
@@ -701,6 +760,7 @@ namespace Calculator2
             }
 
             CalculateFunctionNames();
+            SaveSettings();
         }
 
 
@@ -784,6 +844,11 @@ When using it for your own projects, make sure to give proper credit where neede
         private void FrmMain_Resize(object sender, EventArgs e)
         {
             CustomTabControl.Visible = CustomTabControl.Width > 20;
+        }
+
+        private void openScriptsFolderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Process.Start("explorer.exe", scriptFolder);
         }
     }
 }

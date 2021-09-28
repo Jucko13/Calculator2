@@ -9,19 +9,20 @@ using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Runtime.InteropServices;
 
 namespace Calculator2
 {
 
     //class downloaded from https://github.com/alaabenfatma/VisualStudioTabControl/blob/master/VisualStudioTabControl/VisualStudioTabControl.cs
-    public class VisualStudioTabControl: TabControl
+    public class VisualStudioTabControl : TabControl
     {
         /// <summary>
         ///     Format of the title of the TabPage
         /// </summary>
         private readonly StringFormat CenterSringFormat = new StringFormat
         {
-            Alignment = StringAlignment.Near,
+            Alignment = StringAlignment.Center,
             LineAlignment = StringAlignment.Center,
             FormatFlags = StringFormatFlags.NoWrap,
         };
@@ -86,11 +87,9 @@ namespace Calculator2
         public VisualStudioTabControl()
         {
             SetStyle(
-                ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint | ControlStyles.ResizeRedraw
-                | ControlStyles.OptimizedDoubleBuffer,
-                true);
+                ControlStyles.UserPaint | ControlStyles.ResizeRedraw | ControlStyles.OptimizedDoubleBuffer, true); //ControlStyles.AllPaintingInWmPaint |
             DoubleBuffered = true;
-            SizeMode = TabSizeMode.Normal;
+            //SizeMode = TabSizeMode.Normal;
             ItemSize = new Size(240, 16);
             AllowDrop = true;
         }
@@ -291,6 +290,7 @@ namespace Calculator2
             base.OnDragOver(drgevent);
         }
 
+        private Point dragStart = new Point();
         /// <summary>
         ///     Handles the selected tab|closes the selected page if wanted.
         /// </summary>
@@ -298,6 +298,8 @@ namespace Calculator2
         protected override void OnMouseDown(MouseEventArgs e)
         {
             predraggedTab = getPointedTab();
+            dragStart = e.Location;
+
             var p = e.Location;
             if (!this.ShowClosingButton)
             {
@@ -338,7 +340,7 @@ namespace Calculator2
         /// <param name="e"></param>
         protected override void OnMouseMove(MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Left && predraggedTab != null)
+            if (e.Button == MouseButtons.Left && predraggedTab != null && dragStart != e.Location)
             {
                 this.DoDragDrop(predraggedTab, DragDropEffects.Move);
             }
@@ -356,6 +358,9 @@ namespace Calculator2
             base.OnMouseUp(e);
         }
 
+        
+
+
         /// <summary>
         ///     Draws the control
         /// </summary>
@@ -363,72 +368,64 @@ namespace Calculator2
         protected override void OnPaint(PaintEventArgs e)
         {
             var g = e.Graphics;
-            var Drawer = g;
+            
+            //g.SmoothingMode = SmoothingMode.HighQuality;
+            //g.PixelOffsetMode = PixelOffsetMode.HighQuality;
+            //g.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
+            g.Clear(this.headerColor);
 
-            Drawer.SmoothingMode = SmoothingMode.HighQuality;
-            Drawer.PixelOffsetMode = PixelOffsetMode.HighQuality;
-            Drawer.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
-            Drawer.Clear(this.headerColor);
-            try
-            {
-                SelectedTab.BackColor = this.backTabColor;
-            }
-            catch
-            {
-                // ignored
-            }
-try
-{
-                SelectedTab.BorderStyle = BorderStyle.None;
-            }
-            catch
-            {
-                // ignored
-            }
 
             for (var i = 0; i < TabCount; i++)
             {
-                var Header = new Rectangle(
-                    new Point(GetTabRect(i).Location.X + 2, GetTabRect(i).Location.Y),
-                    new Size(GetTabRect(i).Width, GetTabRect(i).Height));
-                var HeaderSize = new Rectangle(Header.Location, new Size(Header.Width, Header.Height));
+                Rectangle tabRectangle = GetTabRect(i);
+                tabRectangle = new Rectangle(tabRectangle.X - headerPadding.Left, tabRectangle.Y - headerPadding.Top, tabRectangle.Width + headerPadding.Left + headerPadding.Right, tabRectangle.Height + headerPadding.Top + headerPadding.Bottom);
+
+                if(TabPages[i] == SelectedTab)
+                {
+                    TabPages[i].BorderStyle = BorderStyle.None;
+                }
+
+                //var Header = new Rectangle(
+                //    new Point(.Location.X + 2, GetTabRect(i).Location.Y),
+                //    new Size(GetTabRect(i).Width, GetTabRect(i).Height));
+
                 using Brush ClosingColorBrush = new SolidBrush(this.closingButtonColor);
 
                 if (i == SelectedIndex)
                 {
                     // Draws the back of the header 
-                    Drawer.FillRectangle(new SolidBrush(this.headerColor), HeaderSize);
+                    g.FillRectangle(new SolidBrush(this.headerColor), tabRectangle);
 
                     // Draws the back of the color when it is selected
                     Brush activeBrush = new SolidBrush(this.activeColor);
 
-                    Drawer.FillRectangle(
+                    g.FillRectangle(
                         activeBrush,
-                        new Rectangle(Header.X, Header.Y - 3, Header.Width, Header.Height + 5));
+                        tabRectangle);
 
                     // Draws the title of the page
                     Brush selectedTextColorBrush = new SolidBrush(this.selectedTextColor);
-                    Drawer.DrawString(
+                    g.DrawString(
                         TabPages[i].Text,
                         Font,
                         selectedTextColorBrush,
-                        HeaderSize,
+                        tabRectangle,
                         this.CenterSringFormat);
 
                     // Draws the closing button
                     if (this.ShowClosingButton)
                     {
-                        e.Graphics.DrawString("X", Font, ClosingColorBrush, HeaderSize.Right - 17, 3);
+                        e.Graphics.DrawString("X", Font, ClosingColorBrush, tabRectangle.Right - 17, 3);
                     }
                 }
                 else
-                {
+                {   
                     // Simply draws the header when it is not selected
-                    Drawer.DrawString(
+                    g.DrawString(
                         TabPages[i].Text,
                         Font,
                         new SolidBrush(this.textColor),
-                        HeaderSize,
+                        tabRectangle,
                         this.CenterSringFormat);
                 }
             }
@@ -436,18 +433,51 @@ try
             // Draws the horizontal line
             using Pen horizontalLinePen = new Pen(this.horizLineColor, 5);
 
-            Drawer.DrawLine(horizontalLinePen, new Point(headerPadding.Left, this.ItemSize.Height + 3), new Point(Width - headerPadding.Right, this.ItemSize.Height + 3));
+            g.DrawLine(horizontalLinePen, new Point(-headerPadding.Left + 2, this.ItemSize.Height + 3), new Point(Width + headerPadding.Right + headerPadding.Left, this.ItemSize.Height + 3));
 
             // Draws the background of the tab control
             using Brush backgroundBrush = new SolidBrush(this.backTabColor);
 
-            Drawer.FillRectangle(backgroundBrush, new Rectangle(headerPadding.Left, this.ItemSize.Height + 4, Width - headerPadding.Left - headerPadding.Right, Height - this.ItemSize.Height + 4));
+            //Drawer.FillRectangle(backgroundBrush, new Rectangle(headerPadding.Left, this.ItemSize.Height + 4, Width - headerPadding.Left - headerPadding.Right, Height - this.ItemSize.Height + 4));
+            //g.FillRectangle(backgroundBrush, tabRectangle);
+
+
+
 
             // Draws the border of the TabControl
             using Pen borderBen = new Pen(this.borderColor, 2);
-            Drawer.DrawRectangle(borderBen, new Rectangle(0, 0, Width, Height));
-            Drawer.InterpolationMode = InterpolationMode.HighQualityBicubic;
+            g.DrawRectangle(borderBen, new Rectangle(0, 0, Width, Height));
+            g.InterpolationMode = InterpolationMode.HighQualityBicubic;
         }
+
+
+
+        protected override void OnCreateControl()
+        {
+            base.OnCreateControl();
+            this.OnFontChanged(EventArgs.Empty);
+        }
+
+
+
+        [DllImport("user32.dll")]
+        private static extern IntPtr SendMessage(IntPtr hWnd, int Msg, IntPtr wParam, IntPtr lParam);
+
+        private const int WM_SETFONT = 0x30;
+        private const int WM_FONTCHANGE = 0x1d;
+
+
+        protected override void OnFontChanged(EventArgs e)
+        {
+            base.OnFontChanged(e);
+            IntPtr hFont = this.Font.ToHfont();
+            SendMessage(this.Handle, WM_SETFONT, hFont, (IntPtr)(-1));
+            SendMessage(this.Handle, WM_FONTCHANGE, IntPtr.Zero, IntPtr.Zero);
+            this.UpdateStyles();
+        }
+
+
+
 
         /// <summary>
         ///     Gets the pointed tab
