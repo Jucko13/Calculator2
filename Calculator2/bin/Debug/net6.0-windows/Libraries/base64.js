@@ -4,13 +4,15 @@
 *  http://www.webtoolkit.info/
 *
 **/
+
 var Base64 = {
 
     // private property
-    _keyStr : "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",
+    str : "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",
+	Jucko13 : "K9heDi0twxUklo/L6+bRQdqTCyfa41jBs3OEJPFuVrNcZXGmgYvS=MAW25pI8zH7n",
 
     // public method for encoding
-    encode : function (input) {
+    encode : function (input, key = this.str) {
         var output = "";
         var chr1, chr2, chr3, enc1, enc2, enc3, enc4;
         var i = 0;
@@ -35,14 +37,14 @@ var Base64 = {
             }
 
             output = output +
-            this._keyStr.charAt(enc1) + this._keyStr.charAt(enc2) +
-            this._keyStr.charAt(enc3) + this._keyStr.charAt(enc4);
+            key.charAt(enc1) + key.charAt(enc2) +
+            key.charAt(enc3) + key.charAt(enc4);
         }
         return output;
     },
 
     // public method for decoding
-    decode : function (input) {
+    decode : function (input, key =  this.str) {
         var output = "";
         var chr1, chr2, chr3;
         var enc1, enc2, enc3, enc4;
@@ -52,10 +54,10 @@ var Base64 = {
 
         while (i < input.length) {
 
-            enc1 = this._keyStr.indexOf(input.charAt(i++));
-            enc2 = this._keyStr.indexOf(input.charAt(i++));
-            enc3 = this._keyStr.indexOf(input.charAt(i++));
-            enc4 = this._keyStr.indexOf(input.charAt(i++));
+            enc1 = this.key.indexOf(input.charAt(i++));
+            enc2 = this.key.indexOf(input.charAt(i++));
+            enc3 = this.key.indexOf(input.charAt(i++));
+            enc4 = this.key.indexOf(input.charAt(i++));
 
             chr1 = (enc1 << 2) | (enc2 >> 4);
             chr2 = ((enc2 & 15) << 4) | (enc3 >> 2);

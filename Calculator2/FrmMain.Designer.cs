@@ -92,9 +92,16 @@
             this.saveScriptsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.reloadScriptsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openScriptsFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.githubToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openLibrariesFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.preferencesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.executeCalculationOnSaveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ToolStripMenuItemLibrariesLoaded = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.githubToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.ToolStripMenuItemCalculationTime = new System.Windows.Forms.ToolStripMenuItem();
             this.TableButtonExtraLayout = new System.Windows.Forms.TableLayoutPanel();
+            this.MainToolTip = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.FastCode)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.FastCalculation)).BeginInit();
             this.TableButtonLayout.SuspendLayout();
@@ -122,7 +129,7 @@
         '\'',
         '\''};
             this.FastCode.AutoIndentCharsPatterns = "\r\n^\\s*[\\w\\.]+(\\s\\w+)?\\s*(?<range>=)\\s*(?<range>[^;]+);\r\n";
-            this.FastCode.AutoScrollMinSize = new System.Drawing.Size(12, 24);
+            this.FastCode.AutoScrollMinSize = new System.Drawing.Size(53, 24);
             this.FastCode.BackBrush = null;
             this.FastCode.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(49)))), ((int)(((byte)(54)))));
             this.FastCode.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -133,7 +140,6 @@
             this.FastCode.CharWidth = 8;
             this.FastCode.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.FastCode.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
-            this.FastCode.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.FastCode.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.FastCode.IndentBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(33)))), ((int)(((byte)(36)))));
             this.FastCode.IsReplaceMode = false;
@@ -148,14 +154,13 @@
             this.FastCode.ReservedCountOfLineNumberChars = 3;
             this.FastCode.RightBracket = ')';
             this.FastCode.RightBracket2 = '}';
-            this.FastCode.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
+            this.FastCode.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(254)))), ((int)(((byte)(38)))), ((int)(((byte)(79)))), ((int)(((byte)(120)))));
             this.FastCode.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("FastCode.ServiceColors")));
             this.FastCode.ServiceLinesColor = System.Drawing.SystemColors.WindowFrame;
             this.FastCode.ShowFoldingLines = true;
             this.FastCode.Size = new System.Drawing.Size(552, 374);
             this.FastCode.TabIndex = 0;
             this.FastCode.Zoom = 100;
-            this.FastCode.KeyDown += new System.Windows.Forms.KeyEventHandler(this.FastCode_KeyDown);
             // 
             // FastCalculation
             // 
@@ -184,6 +189,7 @@
             this.FastCalculation.CharWidth = 8;
             this.FastCalculation.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.FastCalculation.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.FastCalculation.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.FastCalculation.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.FastCalculation.IsReplaceMode = false;
             this.FastCalculation.Language = FastColoredTextBoxNS.Language.JS;
@@ -848,6 +854,7 @@
             // button34
             // 
             this.button34.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(33)))), ((int)(((byte)(36)))));
+            this.TableButtonExtraLayout.SetColumnSpan(this.button34, 2);
             this.button34.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(166)))), ((int)(((byte)(26)))));
             this.button34.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(107)))), ((int)(((byte)(68)))), ((int)(((byte)(37)))));
             this.button34.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(44)))), ((int)(((byte)(24)))));
@@ -866,6 +873,7 @@
             // button46
             // 
             this.button46.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(33)))), ((int)(((byte)(36)))));
+            this.TableButtonExtraLayout.SetColumnSpan(this.button46, 2);
             this.button46.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(166)))), ((int)(((byte)(26)))));
             this.button46.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(107)))), ((int)(((byte)(68)))), ((int)(((byte)(37)))));
             this.button46.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(44)))), ((int)(((byte)(24)))));
@@ -884,6 +892,7 @@
             // button33
             // 
             this.button33.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(33)))), ((int)(((byte)(36)))));
+            this.TableButtonExtraLayout.SetColumnSpan(this.button33, 2);
             this.button33.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(166)))), ((int)(((byte)(26)))));
             this.button33.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(107)))), ((int)(((byte)(68)))), ((int)(((byte)(37)))));
             this.button33.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(44)))), ((int)(((byte)(24)))));
@@ -902,6 +911,7 @@
             // button35
             // 
             this.button35.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(33)))), ((int)(((byte)(36)))));
+            this.TableButtonExtraLayout.SetColumnSpan(this.button35, 2);
             this.button35.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(166)))), ((int)(((byte)(26)))));
             this.button35.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(107)))), ((int)(((byte)(68)))), ((int)(((byte)(37)))));
             this.button35.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(44)))), ((int)(((byte)(24)))));
@@ -920,6 +930,7 @@
             // button31
             // 
             this.button31.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(33)))), ((int)(((byte)(36)))));
+            this.TableButtonExtraLayout.SetColumnSpan(this.button31, 2);
             this.button31.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(166)))), ((int)(((byte)(26)))));
             this.button31.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(107)))), ((int)(((byte)(68)))), ((int)(((byte)(37)))));
             this.button31.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(44)))), ((int)(((byte)(24)))));
@@ -929,7 +940,7 @@
             this.button31.Location = new System.Drawing.Point(282, 2);
             this.button31.Margin = new System.Windows.Forms.Padding(2);
             this.button31.Name = "button31";
-            this.button31.Size = new System.Drawing.Size(67, 29);
+            this.button31.Size = new System.Drawing.Size(66, 29);
             this.button31.TabIndex = 32;
             this.button31.Tag = "Math.round(|)";
             this.button31.Text = "Round";
@@ -938,6 +949,7 @@
             // button32
             // 
             this.button32.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(33)))), ((int)(((byte)(36)))));
+            this.TableButtonExtraLayout.SetColumnSpan(this.button32, 2);
             this.button32.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(166)))), ((int)(((byte)(26)))));
             this.button32.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(107)))), ((int)(((byte)(68)))), ((int)(((byte)(37)))));
             this.button32.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(44)))), ((int)(((byte)(24)))));
@@ -947,7 +959,7 @@
             this.button32.Location = new System.Drawing.Point(282, 39);
             this.button32.Margin = new System.Windows.Forms.Padding(2);
             this.button32.Name = "button32";
-            this.button32.Size = new System.Drawing.Size(67, 29);
+            this.button32.Size = new System.Drawing.Size(66, 29);
             this.button32.TabIndex = 33;
             this.button32.Tag = " + \"|\" + ";
             this.button32.Text = "+\" \"+";
@@ -956,6 +968,7 @@
             // button18
             // 
             this.button18.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(33)))), ((int)(((byte)(36)))));
+            this.TableButtonExtraLayout.SetColumnSpan(this.button18, 2);
             this.button18.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(166)))), ((int)(((byte)(26)))));
             this.button18.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(107)))), ((int)(((byte)(68)))), ((int)(((byte)(37)))));
             this.button18.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(44)))), ((int)(((byte)(24)))));
@@ -974,6 +987,7 @@
             // button11
             // 
             this.button11.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(33)))), ((int)(((byte)(36)))));
+            this.TableButtonExtraLayout.SetColumnSpan(this.button11, 2);
             this.button11.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(166)))), ((int)(((byte)(26)))));
             this.button11.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(107)))), ((int)(((byte)(68)))), ((int)(((byte)(37)))));
             this.button11.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(44)))), ((int)(((byte)(24)))));
@@ -992,6 +1006,7 @@
             // button14
             // 
             this.button14.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(33)))), ((int)(((byte)(36)))));
+            this.TableButtonExtraLayout.SetColumnSpan(this.button14, 2);
             this.button14.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(67)))), ((int)(((byte)(181)))), ((int)(((byte)(129)))));
             this.button14.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(61)))), ((int)(((byte)(108)))), ((int)(((byte)(80)))));
             this.button14.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(70)))), ((int)(((byte)(52)))));
@@ -1001,7 +1016,7 @@
             this.button14.Location = new System.Drawing.Point(282, 76);
             this.button14.Margin = new System.Windows.Forms.Padding(2);
             this.button14.Name = "button14";
-            this.button14.Size = new System.Drawing.Size(67, 30);
+            this.button14.Size = new System.Drawing.Size(66, 30);
             this.button14.TabIndex = 48;
             this.button14.Tag = ".toString(2)|";
             this.button14.Text = "Bin";
@@ -1010,6 +1025,7 @@
             // button44
             // 
             this.button44.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(33)))), ((int)(((byte)(36)))));
+            this.TableButtonExtraLayout.SetColumnSpan(this.button44, 2);
             this.button44.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(67)))), ((int)(((byte)(181)))), ((int)(((byte)(129)))));
             this.button44.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(61)))), ((int)(((byte)(108)))), ((int)(((byte)(80)))));
             this.button44.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(70)))), ((int)(((byte)(52)))));
@@ -1028,6 +1044,7 @@
             // button43
             // 
             this.button43.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(33)))), ((int)(((byte)(36)))));
+            this.TableButtonExtraLayout.SetColumnSpan(this.button43, 2);
             this.button43.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(67)))), ((int)(((byte)(181)))), ((int)(((byte)(129)))));
             this.button43.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(61)))), ((int)(((byte)(108)))), ((int)(((byte)(80)))));
             this.button43.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(70)))), ((int)(((byte)(52)))));
@@ -1046,6 +1063,7 @@
             // button16
             // 
             this.button16.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(33)))), ((int)(((byte)(36)))));
+            this.TableButtonExtraLayout.SetColumnSpan(this.button16, 2);
             this.button16.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(166)))), ((int)(((byte)(26)))));
             this.button16.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(107)))), ((int)(((byte)(68)))), ((int)(((byte)(37)))));
             this.button16.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(44)))), ((int)(((byte)(24)))));
@@ -1064,6 +1082,7 @@
             // button13
             // 
             this.button13.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(33)))), ((int)(((byte)(36)))));
+            this.TableButtonExtraLayout.SetColumnSpan(this.button13, 2);
             this.button13.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(166)))), ((int)(((byte)(26)))));
             this.button13.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(107)))), ((int)(((byte)(68)))), ((int)(((byte)(37)))));
             this.button13.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(44)))), ((int)(((byte)(24)))));
@@ -1082,6 +1101,7 @@
             // button12
             // 
             this.button12.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(33)))), ((int)(((byte)(36)))));
+            this.TableButtonExtraLayout.SetColumnSpan(this.button12, 2);
             this.button12.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(166)))), ((int)(((byte)(26)))));
             this.button12.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(107)))), ((int)(((byte)(68)))), ((int)(((byte)(37)))));
             this.button12.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(44)))), ((int)(((byte)(24)))));
@@ -1100,6 +1120,7 @@
             // button17
             // 
             this.button17.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(33)))), ((int)(((byte)(36)))));
+            this.TableButtonExtraLayout.SetColumnSpan(this.button17, 2);
             this.button17.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(166)))), ((int)(((byte)(26)))));
             this.button17.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(107)))), ((int)(((byte)(68)))), ((int)(((byte)(37)))));
             this.button17.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(44)))), ((int)(((byte)(24)))));
@@ -1118,6 +1139,7 @@
             // button10
             // 
             this.button10.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(33)))), ((int)(((byte)(36)))));
+            this.TableButtonExtraLayout.SetColumnSpan(this.button10, 2);
             this.button10.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(166)))), ((int)(((byte)(26)))));
             this.button10.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(107)))), ((int)(((byte)(68)))), ((int)(((byte)(37)))));
             this.button10.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(44)))), ((int)(((byte)(24)))));
@@ -1136,6 +1158,7 @@
             // button19
             // 
             this.button19.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(33)))), ((int)(((byte)(36)))));
+            this.TableButtonExtraLayout.SetColumnSpan(this.button19, 2);
             this.button19.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(166)))), ((int)(((byte)(26)))));
             this.button19.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(107)))), ((int)(((byte)(68)))), ((int)(((byte)(37)))));
             this.button19.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(44)))), ((int)(((byte)(24)))));
@@ -1178,7 +1201,6 @@
             this.FastResult.CharWidth = 8;
             this.FastResult.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.FastResult.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
-            this.FastResult.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.FastResult.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.FastResult.IsReplaceMode = false;
             this.FastResult.Language = FastColoredTextBoxNS.Language.JS;
@@ -1243,8 +1265,10 @@
             // 
             this.customMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
-            this.githubToolStripMenuItem,
-            this.helpToolStripMenuItem});
+            this.preferencesToolStripMenuItem,
+            this.ToolStripMenuItemLibrariesLoaded,
+            this.helpToolStripMenuItem,
+            this.ToolStripMenuItemCalculationTime});
             this.customMenuStrip1.Location = new System.Drawing.Point(0, 0);
             this.customMenuStrip1.Name = "customMenuStrip1";
             this.customMenuStrip1.Size = new System.Drawing.Size(912, 24);
@@ -1256,7 +1280,8 @@
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.saveScriptsToolStripMenuItem,
             this.reloadScriptsToolStripMenuItem,
-            this.openScriptsFolderToolStripMenuItem});
+            this.openScriptsFolderToolStripMenuItem,
+            this.openLibrariesFolderToolStripMenuItem});
             this.fileToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
@@ -1265,54 +1290,116 @@
             // saveScriptsToolStripMenuItem
             // 
             this.saveScriptsToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.saveScriptsToolStripMenuItem.Image = global::Calculator2.Properties.Resources.Save_16x;
             this.saveScriptsToolStripMenuItem.Name = "saveScriptsToolStripMenuItem";
             this.saveScriptsToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-            this.saveScriptsToolStripMenuItem.Size = new System.Drawing.Size(220, 22);
+            this.saveScriptsToolStripMenuItem.Size = new System.Drawing.Size(259, 22);
             this.saveScriptsToolStripMenuItem.Text = "Save Scripts";
             this.saveScriptsToolStripMenuItem.Click += new System.EventHandler(this.saveScriptsToolStripMenuItem_Click);
             // 
             // reloadScriptsToolStripMenuItem
             // 
             this.reloadScriptsToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.reloadScriptsToolStripMenuItem.Image = global::Calculator2.Properties.Resources.Refresh_16x;
             this.reloadScriptsToolStripMenuItem.Name = "reloadScriptsToolStripMenuItem";
             this.reloadScriptsToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
-            this.reloadScriptsToolStripMenuItem.Size = new System.Drawing.Size(220, 22);
-            this.reloadScriptsToolStripMenuItem.Text = "Reload Scripts";
+            this.reloadScriptsToolStripMenuItem.Size = new System.Drawing.Size(259, 22);
+            this.reloadScriptsToolStripMenuItem.Text = "Reload Scripts and Libraries";
             this.reloadScriptsToolStripMenuItem.Click += new System.EventHandler(this.reloadScriptsToolStripMenuItem_Click);
             // 
             // openScriptsFolderToolStripMenuItem
             // 
             this.openScriptsFolderToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.openScriptsFolderToolStripMenuItem.Image = global::Calculator2.Properties.Resources.OpenFolder_16x;
             this.openScriptsFolderToolStripMenuItem.Name = "openScriptsFolderToolStripMenuItem";
             this.openScriptsFolderToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.openScriptsFolderToolStripMenuItem.Size = new System.Drawing.Size(220, 22);
+            this.openScriptsFolderToolStripMenuItem.Size = new System.Drawing.Size(259, 22);
             this.openScriptsFolderToolStripMenuItem.Text = "Open Scripts Folder";
             this.openScriptsFolderToolStripMenuItem.Click += new System.EventHandler(this.openScriptsFolderToolStripMenuItem_Click);
             // 
-            // githubToolStripMenuItem
+            // openLibrariesFolderToolStripMenuItem
             // 
-            this.githubToolStripMenuItem.ForeColor = System.Drawing.Color.White;
-            this.githubToolStripMenuItem.Name = "githubToolStripMenuItem";
-            this.githubToolStripMenuItem.Size = new System.Drawing.Size(55, 20);
-            this.githubToolStripMenuItem.Text = "Github";
-            this.githubToolStripMenuItem.Click += new System.EventHandler(this.githubToolStripMenuItem_Click);
+            this.openLibrariesFolderToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.openLibrariesFolderToolStripMenuItem.Image = global::Calculator2.Properties.Resources.OpenFolder_16x;
+            this.openLibrariesFolderToolStripMenuItem.Name = "openLibrariesFolderToolStripMenuItem";
+            this.openLibrariesFolderToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.L)));
+            this.openLibrariesFolderToolStripMenuItem.Size = new System.Drawing.Size(259, 22);
+            this.openLibrariesFolderToolStripMenuItem.Text = "Open Libraries Folder";
+            this.openLibrariesFolderToolStripMenuItem.Click += new System.EventHandler(this.openLibrariesFolderToolStripMenuItem_Click);
+            // 
+            // preferencesToolStripMenuItem
+            // 
+            this.preferencesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.executeCalculationOnSaveToolStripMenuItem});
+            this.preferencesToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.preferencesToolStripMenuItem.Name = "preferencesToolStripMenuItem";
+            this.preferencesToolStripMenuItem.Size = new System.Drawing.Size(80, 20);
+            this.preferencesToolStripMenuItem.Text = "Preferences";
+            // 
+            // executeCalculationOnSaveToolStripMenuItem
+            // 
+            this.executeCalculationOnSaveToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.executeCalculationOnSaveToolStripMenuItem.Name = "executeCalculationOnSaveToolStripMenuItem";
+            this.executeCalculationOnSaveToolStripMenuItem.Size = new System.Drawing.Size(222, 22);
+            this.executeCalculationOnSaveToolStripMenuItem.Text = "Execute Calculation on Save";
+            this.executeCalculationOnSaveToolStripMenuItem.Click += new System.EventHandler(this.executeCalculationOnSaveToolStripMenuItem_Click);
+            // 
+            // ToolStripMenuItemLibrariesLoaded
+            // 
+            this.ToolStripMenuItemLibrariesLoaded.ForeColor = System.Drawing.Color.White;
+            this.ToolStripMenuItemLibrariesLoaded.Name = "ToolStripMenuItemLibrariesLoaded";
+            this.ToolStripMenuItemLibrariesLoaded.Size = new System.Drawing.Size(105, 20);
+            this.ToolStripMenuItemLibrariesLoaded.Text = "Libraries Loaded";
             // 
             // helpToolStripMenuItem
             // 
+            this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.githubToolStripMenuItem1,
+            this.toolStripMenuItem2});
             this.helpToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
-            this.helpToolStripMenuItem.Text = "About";
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.helpToolStripMenuItem.Text = "Help";
             this.helpToolStripMenuItem.Click += new System.EventHandler(this.helpToolStripMenuItem_Click);
+            // 
+            // githubToolStripMenuItem1
+            // 
+            this.githubToolStripMenuItem1.ForeColor = System.Drawing.Color.White;
+            this.githubToolStripMenuItem1.Image = global::Calculator2.Properties.Resources.github_logo2;
+            this.githubToolStripMenuItem1.Name = "githubToolStripMenuItem1";
+            this.githubToolStripMenuItem1.Size = new System.Drawing.Size(110, 22);
+            this.githubToolStripMenuItem1.Text = "Github";
+            this.githubToolStripMenuItem1.Click += new System.EventHandler(this.githubToolStripMenuItem1_Click);
+            // 
+            // toolStripMenuItem2
+            // 
+            this.toolStripMenuItem2.ForeColor = System.Drawing.Color.White;
+            this.toolStripMenuItem2.Image = global::Calculator2.Properties.Resources.InformationSymbol_16x;
+            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(110, 22);
+            this.toolStripMenuItem2.Text = "About";
+            this.toolStripMenuItem2.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
+            // 
+            // ToolStripMenuItemCalculationTime
+            // 
+            this.ToolStripMenuItemCalculationTime.Enabled = false;
+            this.ToolStripMenuItemCalculationTime.Name = "ToolStripMenuItemCalculationTime";
+            this.ToolStripMenuItemCalculationTime.Size = new System.Drawing.Size(53, 20);
+            this.ToolStripMenuItemCalculationTime.Text = "0.0 ms";
             // 
             // TableButtonExtraLayout
             // 
-            this.TableButtonExtraLayout.ColumnCount = 5;
-            this.TableButtonExtraLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.TableButtonExtraLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.TableButtonExtraLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.TableButtonExtraLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.TableButtonExtraLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.TableButtonExtraLayout.ColumnCount = 10;
+            this.TableButtonExtraLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 10F));
+            this.TableButtonExtraLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 10F));
+            this.TableButtonExtraLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 10F));
+            this.TableButtonExtraLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 10F));
+            this.TableButtonExtraLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 10F));
+            this.TableButtonExtraLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 10F));
+            this.TableButtonExtraLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 10F));
+            this.TableButtonExtraLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 10F));
+            this.TableButtonExtraLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 10F));
+            this.TableButtonExtraLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 10F));
             this.TableButtonExtraLayout.Controls.Add(this.button11, 0, 0);
             this.TableButtonExtraLayout.Controls.Add(this.button12, 0, 1);
             this.TableButtonExtraLayout.Controls.Add(this.button10, 0, 2);
@@ -1332,12 +1419,18 @@
             this.TableButtonExtraLayout.Controls.Add(this.button46, 2, 1);
             this.TableButtonExtraLayout.Location = new System.Drawing.Point(2, 388);
             this.TableButtonExtraLayout.Name = "TableButtonExtraLayout";
-            this.TableButtonExtraLayout.RowCount = 4;
-            this.TableButtonExtraLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.TableButtonExtraLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.TableButtonExtraLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.TableButtonExtraLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.TableButtonExtraLayout.Size = new System.Drawing.Size(351, 148);
+            this.TableButtonExtraLayout.RowCount = 10;
+            this.TableButtonExtraLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
+            this.TableButtonExtraLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
+            this.TableButtonExtraLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
+            this.TableButtonExtraLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
+            this.TableButtonExtraLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
+            this.TableButtonExtraLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
+            this.TableButtonExtraLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
+            this.TableButtonExtraLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
+            this.TableButtonExtraLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
+            this.TableButtonExtraLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
+            this.TableButtonExtraLayout.Size = new System.Drawing.Size(351, 370);
             this.TableButtonExtraLayout.TabIndex = 7;
             // 
             // FrmMain
@@ -1353,6 +1446,7 @@
             this.Controls.Add(this.customMenuStrip1);
             this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.customMenuStrip1;
             this.MinimumSize = new System.Drawing.Size(488, 571);
             this.Name = "FrmMain";
@@ -1426,7 +1520,6 @@
         private System.Windows.Forms.ToolStripMenuItem saveScriptsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem reloadScriptsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openScriptsFolderToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem githubToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
         private System.Windows.Forms.Button button46;
         private System.Windows.Forms.Button button14;
@@ -1440,6 +1533,14 @@
         private System.Windows.Forms.Button button50;
         private System.Windows.Forms.Button button51;
         private System.Windows.Forms.TableLayoutPanel TableButtonExtraLayout;
+        private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemCalculationTime;
+        private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemLibrariesLoaded;
+        private System.Windows.Forms.ToolTip MainToolTip;
+        private System.Windows.Forms.ToolStripMenuItem openLibrariesFolderToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem preferencesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem executeCalculationOnSaveToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem githubToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
     }
 }
 

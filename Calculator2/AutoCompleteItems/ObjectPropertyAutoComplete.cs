@@ -30,7 +30,7 @@ namespace Calculator2.AutoCompleteItems
 
         public void SetObjectText(string objectText)
         {
-            this.objectText = new Regex("\\b(" + objectText + ")", RegexOptions.Compiled);
+            this.objectText = new Regex("\\b(" + objectText + ")", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         }
 
         public override CompareResult Compare(string fragmentText)
@@ -55,9 +55,9 @@ namespace Calculator2.AutoCompleteItems
 
             firstPart = fragmentText.Substring(0, num);
 
-            string firstPartLower = firstPart.ToLower().Trim();
+            //string firstPartLower = ToLower();
 
-            bool objectIsMatch = objectText.IsMatch(firstPartLower);
+            bool objectIsMatch = objectText.IsMatch(firstPart.Trim());
 
             if (textTrim == "" && objectIsMatch)
             {

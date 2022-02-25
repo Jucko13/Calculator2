@@ -33,6 +33,16 @@ namespace Calculator2
         public override Color ImageMarginGradientEnd => Color.FromArgb(31, 31, 31);
         public override Color ImageMarginGradientMiddle => Color.FromArgb(31, 31, 31);
 
+
+        public override Color CheckBackground => Color.FromArgb(61, 61, 61);
+        public override Color CheckSelectedBackground => Color.FromArgb(61, 61, 61);
+
+        public override Color ButtonCheckedHighlightBorder => Color.FromArgb(158, 158, 158);
+        public override Color ButtonCheckedHighlight => Color.FromArgb(158, 158, 158);
+        public override Color ButtonSelectedHighlightBorder => Color.FromArgb(158, 158, 158);
+        public override Color ButtonSelectedBorder => Color.FromArgb(61, 61, 61);
+        public override Color CheckPressedBackground => Color.FromArgb(100,100,100);
+        
     }
 
 

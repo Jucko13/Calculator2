@@ -24,6 +24,14 @@
             "fileVersion": "3.0.0.0"
           }
         }
+      },
+      "Newtonsoft.Json/13.0.1": {
+        "runtime": {
+          "lib/netstandard2.0/Newtonsoft.Json.dll": {
+            "assemblyVersion": "13.0.0.0",
+            "fileVersion": "13.0.1.25517"
+          }
+        }
       }
     }
   },
@@ -41,6 +49,13 @@
       "sha512": "sha512-oTYgbK5wt6CrRbYbvOlNrB5+VcRfHa5nhogFctLpbMmQsICWfIbAFoA/OCezpKVOAg4NJnO0SSAIXVmcxs66nQ==",
       "path": "jint/3.0.0-beta-2034",
       "hashPath": "jint.3.0.0-beta-2034.nupkg.sha512"
+    },
+    "Newtonsoft.Json/13.0.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-ppPFpBcvxdsfUonNcvITKqLl3bqxWbDCZIzDWHzjpdAHRFfZe0Dw9HmA0+za13IdyrgJwpkDTDA9fHaxOrt20A==",
+      "path": "newtonsoft.json/13.0.1",
+      "hashPath": "newtonsoft.json.13.0.1.nupkg.sha512"
     }
   }
 }

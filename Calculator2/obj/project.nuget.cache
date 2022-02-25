@@ -1,11 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "wvM1JT4vPLZ88RC7gY814nF/9rDDmYSHSdSKsLrVmlR2+OOgmwRk+6f6Db1n3c7aSmOU46xIkrWhZ46M6HuQiQ==",
+  "dgSpecHash": "K8mSHWzOWbwKC5Zzzkn0zcKzVZ7fXKFQtXL5LoZprxuLTyoiVq7DKO8s+wHm/5kKY9htBl08OeUFM8oSPZIBHg==",
   "success": true,
   "projectFilePath": "D:\\Users\\ricar\\Documents\\GitHub\\Calculator2\\Calculator2\\Calculator2.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\ricar\\.nuget\\packages\\esprima\\2.0.3\\esprima.2.0.3.nupkg.sha512",
-    "C:\\Users\\ricar\\.nuget\\packages\\jint\\3.0.0-beta-2034\\jint.3.0.0-beta-2034.nupkg.sha512"
+    "C:\\Users\\ricar\\.nuget\\packages\\jint\\3.0.0-beta-2034\\jint.3.0.0-beta-2034.nupkg.sha512",
+    "C:\\Users\\ricar\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512"
   ],
   "logs": []
 }

@@ -87,7 +87,7 @@ namespace Calculator2
         public VisualStudioTabControl()
         {
             SetStyle(
-                ControlStyles.UserPaint | ControlStyles.ResizeRedraw | ControlStyles.OptimizedDoubleBuffer, true); //ControlStyles.AllPaintingInWmPaint |
+                ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint | ControlStyles.ResizeRedraw | ControlStyles.OptimizedDoubleBuffer, true); //ControlStyles.AllPaintingInWmPaint |
             DoubleBuffered = true;
             //SizeMode = TabSizeMode.Normal;
             ItemSize = new Size(240, 16);

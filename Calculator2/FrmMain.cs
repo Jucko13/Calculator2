@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Resources;
+using System.Runtime.InteropServices;
 using System.Security.Policy;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -23,6 +24,11 @@ using Jint.Native;
 using Jint.Runtime;
 using Range = FastColoredTextBoxNS.Range;
 
+using System.Xml;
+using Newtonsoft.Json;
+using System.Security.AccessControl;
+using Jint.Runtime.Interop;
+
 namespace Calculator2
 {
     public partial class FrmMain : Form
@@ -31,14 +37,22 @@ namespace Calculator2
         private Jint.Engine engine = null;
 
 
-        private string scriptFolder = "";
+        private string folderScripts = "";
+        private string folderLibraries = "";
+
+        //private Dictionary<string, string> extraButtons = new Dictionary<string, string>();
+
+        private List<ExtraButton> extraButtons = new List<ExtraButton>();
+
+        private ColorDialog colorDialog = new ColorDialog();
 
 
         public FrmMain()
         {
             InitializeComponent();
 
-            scriptFolder = AppDomain.CurrentDomain.BaseDirectory + "Scripts\\";
+            folderScripts = AppDomain.CurrentDomain.BaseDirectory + "Scripts\\";
+            folderLibraries = AppDomain.CurrentDomain.BaseDirectory + "Libraries\\";
         }
 
         //private TextStyle keywordStyle = new TextStyle(Brushes.Red, null, FontStyle.Regular);
@@ -48,21 +62,20 @@ namespace Calculator2
         private string arrayKeywords = @"map|filter|indexOf|pop|push|keys|join
 |reduce|reduceRight|reverse|shift|slice|some|sort|splice|toString|unshift|values|forEach|flat
 |findIndex|find|every|entries|concat|copyWithin";
-        private string stringKeywords = @"charAt|charCodeAt|concat|fromCharcode|indexOf|lastIndexOf|replace|search|slice|split|substr|substring|toLowerCase|toUpperCase|includes|endsWith|repeat|valueOf|trim";
+        private string stringKeywords = @"padStart|charAt|charCodeAt|concat|fromCharcode|indexOf|lastIndexOf|replace|search|slice|split|substr|substring|toLowerCase|toUpperCase|includes|endsWith|repeat|valueOf|trim";
 
         private List<TextStyle> textStyles = new List<TextStyle>()
         {
-            new TextStyle(new SolidBrush(Color.FromArgb(87,166,74)), null, FontStyle.Regular),
-            new TextStyle(new SolidBrush(Color.FromArgb(60, 140, 255)), null, FontStyle.Regular),
-            new TextStyle(new SolidBrush(Color.FromArgb(255, 126, 0)), null, FontStyle.Regular),
-            new TextStyle(new SolidBrush(Color.FromArgb(67,129,181)), null, FontStyle.Regular),
-            new TextStyle(new SolidBrush(Color.FromArgb(191, 112, 0)), null, FontStyle.Regular),
-            new TextStyle(new SolidBrush(Color.FromArgb(170, 98, 255)), null, FontStyle.Regular),
-            new TextStyle(new SolidBrush(Color.FromArgb(0, 200, 242)), null, FontStyle.Regular),
-            new TextStyle(new SolidBrush(Color.FromArgb(220,220,170)), null, FontStyle.Regular),
-            new TextStyle(new SolidBrush(Color.FromArgb(128,128,128)), null, FontStyle.Regular),
-            new TextStyle(new SolidBrush(Color.FromArgb(240,71,71)), null, FontStyle.Regular),
-
+            /* 0 */ new TextStyle(new SolidBrush(Color.FromArgb(87,166,74)), null, FontStyle.Regular),
+            /* 1 */ new TextStyle(new SolidBrush(Color.FromArgb(60, 140, 255)), null, FontStyle.Regular),
+            /* 2 */ new TextStyle(new SolidBrush(Color.FromArgb(255, 126, 0)), null, FontStyle.Regular),
+            /* 3 */ new TextStyle(new SolidBrush(Color.FromArgb(67,129,181)), null, FontStyle.Regular),
+            /* 4 */ new TextStyle(new SolidBrush(Color.FromArgb(191, 112, 0)), null, FontStyle.Regular),
+            /* 5 */ new TextStyle(new SolidBrush(Color.FromArgb(170, 98, 255)), null, FontStyle.Regular),
+            /* 6 */ new TextStyle(new SolidBrush(Color.FromArgb(0, 200, 242)), null, FontStyle.Regular),
+            /* 7 */ new TextStyle(new SolidBrush(Color.FromArgb(220,220,170)), null, FontStyle.Regular),
+            /* 8 */ new TextStyle(new SolidBrush(Color.FromArgb(128,128,128)), null, FontStyle.Regular),
+            /* 9 */ new TextStyle(new SolidBrush(Color.FromArgb(240,71,71)), null, FontStyle.Regular),
         };
 
         private WavyLineStyle criteriaStyleWavyLine = new WavyLineStyle(255, Color.Red);
@@ -101,12 +114,12 @@ namespace Calculator2
 
         private void FrmMain_Load(object sender, EventArgs e)
         {
-            engine = new Jint.Engine();
+            
 
             InitializeButtonsInTableLayout(TableButtonLayout);
             InitializeButtonsInTableLayout(TableButtonExtraLayout);
 
-            
+
             InitializeAutoComplete();
 
             InitializeTextBox(FastCode, true);
@@ -138,7 +151,7 @@ namespace Calculator2
 
             LoadSettings();
 
-            LoadFiles();
+            LoadFiles(true);
 
         }
 
@@ -154,11 +167,43 @@ namespace Calculator2
 
             FastCalculation.Text = Settings.Default.Calculation;
             FastResult.Text = Settings.Default.Result;
+
+            if(Settings.Default.FormWidth > 100 && Settings.Default.FormHeight > 100)
+            {
+                Width = Settings.Default.FormWidth;
+                Height = Settings.Default.FormHeight;
+            }
+
+            colorDialog.CustomColors = Settings.Default.ColorPickerCustomColors ?? new int[0];
+
+            try
+            {
+                if (Settings.Default.ExtraButtons.Length > 0)
+                {
+                    JsonSerializerSettings settings = new JsonSerializerSettings
+                    {
+                        TypeNameHandling = TypeNameHandling.Auto,
+                    };
+
+                    extraButtons = JsonConvert.DeserializeObject<List<ExtraButton>>(Settings.Default.ExtraButtons, settings) ?? new List<ExtraButton>();
+                }
+            }
+            catch
+            {
+
+            }
+
+            executeCalculationOnSaveToolStripMenuItem.Checked = Settings.Default.PreferenceExecuteOnSave;
+
+            LoadExtraButtons(true);
+
         }
 
         private void LoadPageOrder()
         {
             var pageOrder = Settings.Default.PageOrder;
+
+            CustomTabControl.BeginControlUpdate();
 
             var pages = CustomTabControl.TabPages.OfType<TabPage>().ToList();
             pages.ForEach(x => CustomTabControl.TabPages.Remove(x));
@@ -167,6 +212,8 @@ namespace Calculator2
             newPageOrder = newPageOrder.Concat(pages.Except(newPageOrder)).ToList();
 
             CustomTabControl.TabPages.AddRange(newPageOrder.ToArray());
+
+            CustomTabControl.EndControlUpdate();
         }
 
         private void SavePageOrder()
@@ -174,11 +221,34 @@ namespace Calculator2
             Settings.Default.PageOrder = CustomTabControl.TabPages.OfType<TabPage>().Select(x => x.Text).ToArray();
         }
 
+        private void SaveCalculationAndResult(bool saveToFile = false)
+        {
+            Settings.Default.Calculation = FastCalculation.Text;
+            Settings.Default.Result = FastResult.Text;
+
+            if (saveToFile)
+            {
+                Settings.Default.Save();
+            }
+        }
+
         private void SaveSettings()
         {
             SavePageOrder();
-            Settings.Default.Calculation = FastCalculation.Text;
-            Settings.Default.Result = FastResult.Text;
+
+            SaveCalculationAndResult(false);
+
+
+            JsonSerializerSettings settings = new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.Auto,
+            };
+
+            Settings.Default.ExtraButtons = JsonConvert.SerializeObject(extraButtons, settings);
+
+            Settings.Default.FormWidth = Width;
+            Settings.Default.FormHeight = Height;
+            Settings.Default.ColorPickerCustomColors = colorDialog.CustomColors;
 
             Settings.Default.Save();
         }
@@ -200,6 +270,7 @@ namespace Calculator2
         private Regex JScriptKeywordRegex = null;
         private Regex operatorRegex = null;
 
+        private List<AutocompleteMenu> autocompleteMenus = new List<AutocompleteMenu>();
 
         private void InitializeTextBox(FastColoredTextBox textBox, bool multiline = false)
         {
@@ -219,9 +290,15 @@ namespace Calculator2
                 textBox.IndentBackColor = Color.FromArgb(30, 33, 36);
                 textBox.Location = new Point(0, -1);
                 textBox.Paddings = new Padding(5);
-
+                textBox.KeyDown += new KeyEventHandler(FastCode_KeyDown);
+                textBox.TextChangedDelayed += FastColoredTextBox_TextChangedDelayed;
+            }
+            else
+            {
+                textBox.TextChanged += FastColoredTextBox_TextChangedDelayed;
             }
 
+            textBox.SelectionColor = Color.FromArgb(60, 67, 139, 211); //38, 79, 120
             textBox.ShowFoldingLines = multiline;
             textBox.LeftBracket = '(';
             textBox.LeftBracket2 = '{';
@@ -230,7 +307,6 @@ namespace Calculator2
             textBox.ReservedCountOfLineNumberChars = 3;
             textBox.RightBracket = ')';
             textBox.RightBracket2 = '}';
-            textBox.SelectionColor = Color.FromArgb(60, 0, 0, 255);
             textBox.ServiceLinesColor = SystemColors.WindowFrame;
             textBox.TabIndex = 0;
             textBox.Zoom = 100;
@@ -240,7 +316,6 @@ namespace Calculator2
             textBox.AutoCompleteBracketsList = new char[] { '(', ')', '{', '}', '[', ']', '\"', '\"', '\'', '\'' };
             textBox.IsReplaceMode = false;
             textBox.Language = Language.JS;
-
 
             criteriaStyleRainbow.ForEach(x => textBox.AddStyle(x));
             textStyles.ForEach(x => textBox.AddStyle(x));
@@ -258,7 +333,6 @@ namespace Calculator2
 
             textBox.BracketsStyle = bracketMarkerStyle;
             textBox.BracketsHighlightStrategy = BracketsHighlightStrategy.Strategy2;
-            textBox.TextChangedDelayed += FastColoredTextBox_TextChangedDelayed;
 
             textBox.ServiceColors.ExpandMarkerBackColor = Color.FromArgb(30, 33, 36);
             textBox.ServiceColors.CollapseMarkerBackColor = Color.FromArgb(30, 33, 36);
@@ -278,6 +352,72 @@ namespace Calculator2
         }
 
 
+        private List<Button> extraButtonsOnForm = new List<Button>();
+        private void LoadExtraButtons(bool initialize = false)
+        {
+
+            if (!initialize)
+            {
+                try
+                {
+                    var val = (object[])engine.GetValue("programButtons").ToObject();
+                    extraButtons = val.Select(x => ((System.Dynamic.ExpandoObject)x).ToList()).Select(x =>
+                    {
+                        var buttonProperties = x.ToDictionary(x => x.Key, y => y.Value);
+                        var extraButton = new ExtraButton();
+
+                        if (buttonProperties.TryGetValue("Text", out object? textValue)) extraButton.Text = (string?)textValue ?? "";
+                        if (buttonProperties.TryGetValue("Action", out object? actionValue)) extraButton.Action = (string?)actionValue ?? "";
+                        if (buttonProperties.TryGetValue("Colspan", out object? colspanValue)) extraButton.Colspan = (int)((double?)colspanValue ?? 0);
+                        if (buttonProperties.TryGetValue("Color", out object? colorValue)) extraButton.Color = new ExtraButton.ColorWrapper() { Color = System.Drawing.ColorTranslator.FromHtml((string?)colorValue ?? "#ffffff") };
+                        if (buttonProperties.TryGetValue("TooltipText", out object? tooltipText)) extraButton.TooltipText = (string?)tooltipText ?? "";
+
+                        return extraButton;
+                    }).ToList();
+                }
+                catch (Exception ex)
+                {
+                    FastResult.Text = "Could not process programButtons";
+                }
+            }
+
+            extraButtonsOnForm.ForEach(x =>
+            {
+                TableButtonExtraLayout.Controls.Remove(x);
+                x.Dispose();
+            });
+            extraButtonsOnForm.Clear();
+
+            foreach (var item in extraButtons)
+            {
+                var button = new Button()
+                {
+                    Font = Font,
+                    BackColor = this.BackColor,
+                    ForeColor = item.Color.Color,
+                    FlatStyle = FlatStyle.Flat,
+                    Text = item.Text,
+                    Dock = DockStyle.Fill,
+                    Visible = true,
+                    Margin = new Padding(2)
+                };
+
+                MainToolTip.SetToolTip(button, item.TooltipText);
+
+                button.FlatAppearance.BorderColor = item.Color.Color;
+
+                button.Click += (_, __) =>
+                {
+                    InsertCalculationText(item.Action);
+                };
+
+                extraButtonsOnForm.Add(button);
+                TableButtonExtraLayout.Controls.Add(button);
+                TableButtonExtraLayout.SetColumnSpan(button, item.Colspan);
+            }
+        }
+
+
         private class FilePage
         {
             public string Contents { get; set; }
@@ -293,16 +433,83 @@ namespace Calculator2
         private List<FilePage> fileContents = new List<FilePage>();
 
 
-        private void LoadFiles()
+        private void LoadFiles(bool initialize = false)
         {
 
+            engine = new Jint.Engine((e, o) => {
+                o.AllowClr();
+                o.AllowClrWrite(true);
+                //o.TimeoutInterval(TimeSpan.FromSeconds(10));
+            });
 
-            if (!Directory.Exists(scriptFolder))
+            engine.SetValue("color", TypeReference.CreateTypeReference(engine, typeof(Color)));
+            engine.SetValue("LoadExtraButtons", (MethodInvoker)(() => LoadExtraButtons()));
+            engine.SetValue("colorPicker", colorDialog);
+            engine.SetValue("Form", this);
+            engine.SetValue("File", TypeReference.CreateTypeReference(engine, typeof(File)));
+
+            if (!Directory.Exists(folderLibraries))
             {
-                Directory.CreateDirectory(scriptFolder);
+                Directory.CreateDirectory(folderLibraries);
             }
 
-            string[] files = Directory.GetFiles(scriptFolder, "*.js");
+            string[] files = Directory.GetFiles(folderLibraries, "*.js");
+            ToolStripMenuItemLibrariesLoaded.DropDownItems.Clear();
+            List<string> errorTexts = new List<string>();
+
+
+            for (int i = 0; i < files.Length; i++)
+            {
+                string libraryName = Path.GetFileName(files[i]);
+
+                try
+                {
+                    
+                    if (!initialize)
+                    {
+                        FastResult.Text = $"Loading library {i}/{files.Length}: '{libraryName}'";
+                        Application.DoEvents();
+                    }
+
+                    engine.Execute(File.ReadAllText(files[i]));
+
+                    var toolstripItem = ToolStripMenuItemLibrariesLoaded.DropDownItems.Add(libraryName);
+                    toolstripItem.ForeColor = Color.White;
+                    toolstripItem.Enabled = false;
+                    toolstripItem.Image = Resources.JSScript_16x;
+                }
+                catch (JavaScriptException jex)
+                {
+                    errorTexts.Add($"[Error at {libraryName}:{jex.Location.Start.Line}, {jex.Location.Start.Column}] {jex.Message}");
+                }
+                catch (ParserException pex)
+                {
+                    errorTexts.Add($"[Error at {libraryName}:{pex.LineNumber}, {pex.Column}] {pex.Description ?? ""}");
+                }
+                catch (Exception ex)
+                {
+                    errorTexts.Add($"[Error at {libraryName}]:{ex.Message}");
+                }
+
+            }
+
+            if(errorTexts.Count > 0)
+            {
+                FastResult.Text = string.Join("\n", errorTexts);
+            }
+            else if(!initialize)
+            {
+                FastResult.Text = "Libraries loaded";
+            }
+
+
+
+            if (!Directory.Exists(folderScripts))
+            {
+                Directory.CreateDirectory(folderScripts);
+            }
+
+            files = Directory.GetFiles(folderScripts, "*.js");
 
             for (int i = fileContents.Count - 1; i > 0; i--)
             {
@@ -375,6 +582,31 @@ namespace Calculator2
             //}
         }
 
+        private void InsertCalculationText(string text)
+        {
+            string[] tagParts = text.Split('|');
+            if (tagParts.Length != 2)
+            {
+                MessageBox.Show("Button Tag should have a single '|' character!");
+
+                FastCalculation.Focus();
+                return;
+            }
+            int selectStart;
+            int selectLength;
+            string selectedText;
+
+            selectStart = FastCalculation.SelectionStart;
+            selectedText = FastCalculation.SelectedText;
+            FastCalculation.SelectedText = tagParts[0] + FastCalculation.SelectedText + tagParts[1];
+
+            FastCalculation.SelectionStart = selectStart + tagParts[0].Length + selectedText.Length;
+            FastCalculation.SelectionLength = 0;
+            FastCalculation.Refresh();
+
+            FastCalculation.Focus();
+        }
+
         private void TableButton_Click(object? sender, EventArgs e)
         {
             if (sender is null) return;
@@ -388,24 +620,7 @@ namespace Calculator2
 
             if (button.Tag != null && button.Tag is string s && s.Length > 0)
             {
-                string[] tagParts = s.Split('|');
-                if (tagParts.Length != 2)
-                {
-                    MessageBox.Show("Button Tag should have a single '|' character!");
-
-                    FastCalculation.Focus();
-                    return;
-                }
-                selectStart = FastCalculation.SelectionStart;
-                selectedText = FastCalculation.SelectedText;
-                FastCalculation.SelectedText = tagParts[0] + FastCalculation.SelectedText + tagParts[1];
-
-                FastCalculation.SelectionStart = selectStart + tagParts[0].Length + selectedText.Length;
-                FastCalculation.SelectionLength = 0;
-                FastCalculation.Refresh();
-
-                FastCalculation.Focus();
-
+                InsertCalculationText(s);
                 return;
             }
 
@@ -523,6 +738,8 @@ namespace Calculator2
 
                 var newCustomFunctionNames = script.ChildNodes.OfType<FunctionDeclaration>().Select(x => x.Id?.Name).Where(x => x != null).OrderBy(x => x).ToList();
 
+                //var test = script.ChildNodes.OfType<Esprima.Ast.TemplateElement>().ToList();
+
                 //keep track of the array objects and add some functionality to the autocomplete menu
                 string arrayObjects = string.Join('|', script.ChildNodes.OfType<VariableDeclaration>().Where(x => (((VariableDeclarator)x.ChildNodes[0]).Init?.Type ?? Nodes.WhileStatement) == Nodes.ArrayExpression).Select(x => ((Identifier)((VariableDeclarator)x.ChildNodes[0]).Id).Name ?? "").ToArray());
                 autocompleteArrayObjects.ForEach(x => x.SetObjectText(arrayObjects));
@@ -551,7 +768,6 @@ namespace Calculator2
 
         private void ExecuteCode()
         {
-
             Stopwatch stopwatch = Stopwatch.StartNew();
 
             int lineStart = 0;
@@ -571,6 +787,8 @@ namespace Calculator2
                     filePage.TextBox.Range.ClearStyle(criteriaStyleWavyLine);
                 }
 
+                FastCalculation.Range.ClearStyle(criteriaStyleWavyLine);
+
                 JsValue result = engine.Evaluate($"{stringBuilder} return JSON.stringify({FastCalculation.Text});");
 
                 //JsValue result = engine.Evaluate(script);
@@ -581,11 +799,11 @@ namespace Calculator2
                 }
                 else
                 {
-                    FastResult.Text = result.ToString() + stopwatch.Elapsed.TotalMilliseconds.ToString(" | 0.## ms");
-
+                    FastResult.Text = result.ToString();
+                    ToolStripMenuItemCalculationTime.Text = stopwatch.Elapsed.TotalMilliseconds.ToString("0.## ms");
                 }
 
-                SaveSettings();
+                SaveCalculationAndResult(true);
 
                 return;
 
@@ -650,11 +868,11 @@ namespace Calculator2
 
             Range range = textBox.Range;
 
-            if (JScriptKeywordRegex != null) range.SetStyle(textStyles[7], JScriptKeywordRegex);
-
-
-            range.SetStyle(textStyles[9], operatorRegex);
+            range.ClearStyle(textStyles[7]);
             range.ClearStyle(criteriaStyleRainbow.ToArray());
+
+            if (JScriptKeywordRegex != null) range.SetStyle(textStyles[7], JScriptKeywordRegex);
+            range.SetStyle(textStyles[5], operatorRegex);
 
 
 
@@ -733,13 +951,23 @@ namespace Calculator2
 
         }
 
-        private void FastCode_KeyDown(object sender, KeyEventArgs e)
+        private void FastCode_KeyDown(object? sender, KeyEventArgs e)
         {
+            FastColoredTextBox textBox = (FastColoredTextBox)sender;
+
             if (e.KeyData == (Keys.Control | Keys.S))
             {
                 e.Handled = true;
 
                 SaveFiles();
+            }
+            else if(e.KeyCode == Keys.F5)
+            {
+                ExecuteCode();
+            }
+            else if(e.KeyData == (Keys.Control | Keys.Space))
+            {
+                
             }
         }
 
@@ -761,6 +989,11 @@ namespace Calculator2
 
             CalculateFunctionNames();
             SaveSettings();
+
+            if (Settings.Default.PreferenceExecuteOnSave)
+            {
+                ExecuteCode();
+            }
         }
 
 
@@ -778,21 +1011,12 @@ namespace Calculator2
 
         private void helpToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(@"This calculator is made by Ricardo de Roode.
-
-This code may be used for your own projects, but you may not sell the program, or parts of it, without permission of the owner of this software. 
-
-When using it for your own projects, make sure to give proper credit where needed.", "About", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            
         }
 
         private void githubToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var psi = new ProcessStartInfo
-            {
-                FileName = "https://github.com/Jucko13/Calculator2",
-                UseShellExecute = true
-            };
-            Process.Start(psi);
+            
 
         }
 
@@ -848,7 +1072,40 @@ When using it for your own projects, make sure to give proper credit where neede
 
         private void openScriptsFolderToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Process.Start("explorer.exe", scriptFolder);
+            Process.Start("explorer.exe", folderScripts);
+        }
+
+        private void openLibrariesFolderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Process.Start("explorer.exe", folderLibraries);
+        }
+
+        private void executeCalculationOnSaveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            executeCalculationOnSaveToolStripMenuItem.Checked = !executeCalculationOnSaveToolStripMenuItem.Checked;
+
+            Settings.Default.PreferenceExecuteOnSave = executeCalculationOnSaveToolStripMenuItem.Checked;
+
+            Settings.Default.Save();
+        }
+
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(@"This calculator is made by Ricardo de Roode.
+
+This code may be used for your own projects, but you may not sell the program, or parts of it, without permission of the owner of this software. 
+
+When using it for your own projects, make sure to give proper credit where needed.", "About", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void githubToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            var psi = new ProcessStartInfo
+            {
+                FileName = "https://github.com/Jucko13/Calculator2",
+                UseShellExecute = true
+            };
+            Process.Start(psi);
         }
     }
 }
