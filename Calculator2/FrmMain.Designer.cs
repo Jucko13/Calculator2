@@ -140,6 +140,7 @@
             this.FastCode.CharWidth = 8;
             this.FastCode.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.FastCode.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.FastCode.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.FastCode.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.FastCode.IndentBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(33)))), ((int)(((byte)(36)))));
             this.FastCode.IsReplaceMode = false;
@@ -189,7 +190,6 @@
             this.FastCalculation.CharWidth = 8;
             this.FastCalculation.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.FastCalculation.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
-            this.FastCalculation.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.FastCalculation.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.FastCalculation.IsReplaceMode = false;
             this.FastCalculation.Language = FastColoredTextBoxNS.Language.JS;
@@ -1201,6 +1201,7 @@
             this.FastResult.CharWidth = 8;
             this.FastResult.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.FastResult.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.FastResult.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.FastResult.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.FastResult.IsReplaceMode = false;
             this.FastResult.Language = FastColoredTextBoxNS.Language.JS;

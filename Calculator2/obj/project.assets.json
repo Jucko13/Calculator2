@@ -104,11 +104,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Users\\ricar\\Documents\\GitHub\\Calculator2\\Calculator2\\Calculator2.csproj",
+      "projectUniqueName": "D:\\Ricardo\\Github\\Calculator2\\Calculator2\\Calculator2.csproj",
       "projectName": "Calculator2",
-      "projectPath": "D:\\Users\\ricar\\Documents\\GitHub\\Calculator2\\Calculator2\\Calculator2.csproj",
+      "projectPath": "D:\\Ricardo\\Github\\Calculator2\\Calculator2\\Calculator2.csproj",
       "packagesPath": "C:\\Users\\ricar\\.nuget\\packages\\",
-      "outputPath": "D:\\Users\\ricar\\Documents\\GitHub\\Calculator2\\Calculator2\\obj\\",
+      "outputPath": "D:\\Ricardo\\Github\\Calculator2\\Calculator2\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\ricar\\AppData\\Roaming\\NuGet\\NuGet.Config",

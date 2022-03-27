@@ -40,3 +40,9 @@ D:\Users\ricar\Documents\GitHub\Calculator2\Calculator2\bin\Debug\net6.0-windows
 D:\Users\ricar\Documents\GitHub\Calculator2\Calculator2\bin\Debug\net6.0-windows\Newtonsoft.Json.dll
 D:\Users\ricar\Documents\GitHub\Calculator2\Calculator2\obj\Debug\net6.0-windows\Calculator2.Properties.Resources.resources
 D:\Users\ricar\Documents\GitHub\Calculator2\Calculator2\obj\Debug\net6.0-windows\Calculator2.csproj.CopyComplete
+D:\Ricardo\Github\Calculator2\Calculator2\bin\Debug\net6.0-windows\Esprima.dll
+D:\Ricardo\Github\Calculator2\Calculator2\bin\Debug\net6.0-windows\Jint.dll
+D:\Ricardo\Github\Calculator2\Calculator2\bin\Debug\net6.0-windows\Newtonsoft.Json.dll
+D:\Ricardo\Github\Calculator2\Calculator2\bin\Debug\net6.0-windows\FastColoredTextBox.pdb
+D:\Ricardo\Github\Calculator2\Calculator2\obj\Debug\net6.0-windows\Calculator2.Properties.Resources.resources
+D:\Ricardo\Github\Calculator2\Calculator2\obj\Debug\net6.0-windows\Calculator2.csproj.CopyComplete

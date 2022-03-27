@@ -447,6 +447,7 @@ namespace Calculator2
             engine.SetValue("colorPicker", colorDialog);
             engine.SetValue("Form", this);
             engine.SetValue("File", TypeReference.CreateTypeReference(engine, typeof(File)));
+            engine.SetValue("Clipboard", TypeReference.CreateTypeReference(engine, typeof(Clipboard)));
 
             if (!Directory.Exists(folderLibraries))
             {

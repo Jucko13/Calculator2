@@ -4,7 +4,7 @@ var j = "10,20,30,40".split(',');
 //var test = [0,2,3,4,5,6,7,8,9,10,20,30,40,50,60,70,80,90,100].shuffle();
 
 function bla2(){
-    return "bla";
+    return Clipboard.GetText().split(',');
     
 }
 

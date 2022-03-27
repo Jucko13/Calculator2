@@ -5,7 +5,7 @@ var programButtons = [
         Text: "", //spacer
         Action: "|",
         Color : rgbToHex(30, 33, 36)
-        Colspan: 10,
+        Colspan: 6,
         TooltipText : ""
     },
     { 

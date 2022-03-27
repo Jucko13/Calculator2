@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
 	  <LangVersion>8.0</LangVersion>
-	  <ApplicationIcon>Icon.ico</ApplicationIcon>
+	  <ApplicationIcon>calculator-icon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -18,7 +18,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="Icon.ico" />
+    <Content Include="calculator-icon.ico" />
   </ItemGroup>
 
   <ItemGroup>
