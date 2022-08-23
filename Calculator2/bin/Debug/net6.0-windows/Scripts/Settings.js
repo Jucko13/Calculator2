@@ -28,5 +28,12 @@ var programButtons = [
         Color : "#b300e3"
         Colspan: 1,
         TooltipText : "Opens the .Net ColorDialog"
+    },
+    { 
+        Text: "printTime(s)", //paint swatch
+        Action: "printTime(|)",
+        Color : rgbToHex(15, 190, 0xe3)
+        Colspan: 3,
+        TooltipText : "prints seconds as timestamp"
     }
 ];

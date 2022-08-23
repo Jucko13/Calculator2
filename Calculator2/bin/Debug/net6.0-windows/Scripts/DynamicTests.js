@@ -1,3 +1,9 @@
+var r   = 4;
+var aT  = (Math.sqrt(3)/2)*r*(r/2);
+var aC  = Math.PI * r**2;
+var aCP = aC /6;
+var aS  = aCP-aT;
+
 
 var j = "10,20,30,40".split(',');
 

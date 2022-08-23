@@ -2,7 +2,6 @@ D:\Ricardo\Github\Calculator2\Calculator2\bin\Debug\net6.0-windows\Calculator2.e
 D:\Ricardo\Github\Calculator2\Calculator2\bin\Debug\net6.0-windows\Calculator2.deps.json
 D:\Ricardo\Github\Calculator2\Calculator2\bin\Debug\net6.0-windows\Calculator2.runtimeconfig.json
 D:\Ricardo\Github\Calculator2\Calculator2\bin\Debug\net6.0-windows\Calculator2.dll
-D:\Ricardo\Github\Calculator2\Calculator2\bin\Debug\net6.0-windows\ref\Calculator2.dll
 D:\Ricardo\Github\Calculator2\Calculator2\bin\Debug\net6.0-windows\Calculator2.pdb
 D:\Ricardo\Github\Calculator2\Calculator2\bin\Debug\net6.0-windows\FastColoredTextBox.dll
 D:\Ricardo\Github\Calculator2\Calculator2\obj\Debug\net6.0-windows\Calculator2.csproj.AssemblyReference.cache
@@ -46,3 +45,4 @@ D:\Ricardo\Github\Calculator2\Calculator2\bin\Debug\net6.0-windows\Newtonsoft.Js
 D:\Ricardo\Github\Calculator2\Calculator2\bin\Debug\net6.0-windows\FastColoredTextBox.pdb
 D:\Ricardo\Github\Calculator2\Calculator2\obj\Debug\net6.0-windows\Calculator2.Properties.Resources.resources
 D:\Ricardo\Github\Calculator2\Calculator2\obj\Debug\net6.0-windows\Calculator2.csproj.CopyComplete
+D:\Ricardo\Github\Calculator2\Calculator2\obj\Debug\net6.0-windows\refint\Calculator2.dll

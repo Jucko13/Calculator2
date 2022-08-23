@@ -788,9 +788,12 @@ namespace Calculator2
                     filePage.TextBox.Range.ClearStyle(criteriaStyleWavyLine);
                 }
 
+                stringBuilder.AppendLine($"var ans = '{FastResult.Text}';");
+
                 FastCalculation.Range.ClearStyle(criteriaStyleWavyLine);
 
-                JsValue result = engine.Evaluate($"{stringBuilder} return JSON.stringify({FastCalculation.Text});");
+                string toCalculate = $"{stringBuilder}return JSON.stringify({FastCalculation.Text});";
+                JsValue result = engine.Evaluate(toCalculate);
 
                 //JsValue result = engine.Evaluate(script);
 
@@ -847,7 +850,7 @@ namespace Calculator2
                 lineOffset += fileContents[i].CodeLineLength;
             }
 
-            new Range(FastCalculation, columnStart, lineStart - lineOffset - 1, columnEnd, lineEnd - lineOffset - 1).SetStyle(criteriaStyleWavyLine);
+            new Range(FastCalculation, columnStart, lineStart - lineOffset - 2, columnEnd, lineEnd - lineOffset - 2).SetStyle(criteriaStyleWavyLine);
             FastResult.Text = $"[Error at {lineStart - lineOffset}, {columnStart}] {errorMessage}";
         }
 
