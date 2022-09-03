@@ -229,6 +229,8 @@ namespace Calculator2
             if (saveToFile)
             {
                 Settings.Default.Save();
+
+                //Highperformance
             }
         }
 
@@ -436,18 +438,34 @@ namespace Calculator2
         private void LoadFiles(bool initialize = false)
         {
 
+            string Serialize(object o) =>
+            Newtonsoft.Json.JsonConvert.SerializeObject(o,
+                new Newtonsoft.Json.JsonSerializerSettings
+                {
+                    ContractResolver = new Newtonsoft.Json.Serialization.DefaultContractResolver
+                    {
+                        NamingStrategy = new Newtonsoft.Json.Serialization.SnakeCaseNamingStrategy()
+                    }
+                });
+
             engine = new Jint.Engine((e, o) => {
                 o.AllowClr();
                 o.AllowClrWrite(true);
+                o.AllowOperatorOverloading(true);
+                o.Interop.AllowGetType = true;
+                o.Interop.AllowSystemReflection = true;
+                o.Interop.SerializeToJson = Serialize;
                 //o.TimeoutInterval(TimeSpan.FromSeconds(10));
             });
-
-            engine.SetValue("color", TypeReference.CreateTypeReference(engine, typeof(Color)));
+            
+            engine.SetValue("Color", TypeReference.CreateTypeReference<Color>(engine));
             engine.SetValue("LoadExtraButtons", (MethodInvoker)(() => LoadExtraButtons()));
             engine.SetValue("colorPicker", colorDialog);
             engine.SetValue("Form", this);
             engine.SetValue("File", TypeReference.CreateTypeReference(engine, typeof(File)));
             engine.SetValue("Clipboard", TypeReference.CreateTypeReference(engine, typeof(Clipboard)));
+            engine.SetValue("DateTime", TypeReference.CreateTypeReference<DateTime>(engine));
+            engine.SetValue("TimeSpan", TypeReference.CreateTypeReference<TimeSpan>(engine));
 
             if (!Directory.Exists(folderLibraries))
             {
@@ -731,18 +749,18 @@ namespace Calculator2
                 filePage.TextBox.Range.ClearStyle(criteriaStyleWavyLine);
             }
 
-            var parser = new JavaScriptParser($"{stringBuilder} return JSON.stringify({FastCalculation.Text});");
+            var parser = new JavaScriptParser();
 
             try
             {
-                var script = parser.ParseScript();
+                var script = parser.ParseScript($"{stringBuilder} return JSON.stringify({FastCalculation.Text});");
 
                 var newCustomFunctionNames = script.ChildNodes.OfType<FunctionDeclaration>().Select(x => x.Id?.Name).Where(x => x != null).OrderBy(x => x).ToList();
 
                 //var test = script.ChildNodes.OfType<Esprima.Ast.TemplateElement>().ToList();
 
                 //keep track of the array objects and add some functionality to the autocomplete menu
-                string arrayObjects = string.Join('|', script.ChildNodes.OfType<VariableDeclaration>().Where(x => (((VariableDeclarator)x.ChildNodes[0]).Init?.Type ?? Nodes.WhileStatement) == Nodes.ArrayExpression).Select(x => ((Identifier)((VariableDeclarator)x.ChildNodes[0]).Id).Name ?? "").ToArray());
+                string arrayObjects = "hi|what"; // string.Join('|', script.ChildNodes.OfType<VariableDeclaration>().Where(x => (((VariableDeclarator)x.ChildNodes[0]).Init?.Type ?? Nodes.WhileStatement) == Nodes.ArrayExpression).Select(x => ((Identifier)((VariableDeclarator)x.ChildNodes[0]).Id).Name ?? "").ToArray());
                 autocompleteArrayObjects.ForEach(x => x.SetObjectText(arrayObjects));
 
 
@@ -788,7 +806,7 @@ namespace Calculator2
                     filePage.TextBox.Range.ClearStyle(criteriaStyleWavyLine);
                 }
 
-                stringBuilder.AppendLine($"var ans = '{FastResult.Text}';");
+                stringBuilder.AppendLine($"var ans = \"{FastResult.Text.Replace("\"","\\\"")}\";");
 
                 FastCalculation.Range.ClearStyle(criteriaStyleWavyLine);
 

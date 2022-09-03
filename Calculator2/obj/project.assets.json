@@ -2,19 +2,19 @@
   "version": 3,
   "targets": {
     "net6.0-windows7.0": {
-      "Esprima/2.0.3": {
+      "Esprima/3.0.0-beta-6": {
         "type": "package",
         "compile": {
-          "lib/netstandard2.0/Esprima.dll": {}
+          "lib/netstandard2.1/Esprima.dll": {}
         },
         "runtime": {
-          "lib/netstandard2.0/Esprima.dll": {}
+          "lib/netstandard2.1/Esprima.dll": {}
         }
       },
-      "Jint/3.0.0-beta-2034": {
+      "Jint/3.0.0-beta-2040": {
         "type": "package",
         "dependencies": {
-          "Esprima": "2.0.3"
+          "Esprima": "3.0.0-beta-6"
         },
         "compile": {
           "lib/netstandard2.1/Jint.dll": {}
@@ -35,31 +35,33 @@
     }
   },
   "libraries": {
-    "Esprima/2.0.3": {
-      "sha512": "OC3bLH/ENblaiFx1yCglfMpZDr4iwFXegMldzr3s3PFJq9Pw8c3kqTOIdi6Is+zn8nB79hvAbXnS19ZaaAafCg==",
+    "Esprima/3.0.0-beta-6": {
+      "sha512": "9bhi0RrFOb7WDO2NuxibY8Zq7WaoTYAP+snnBFLobV5AuvApYTWSO9ol475IUVvYlrLU+EFOb8A/FdIamAiYTA==",
       "type": "package",
-      "path": "esprima/2.0.3",
+      "path": "esprima/3.0.0-beta-6",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
-        "esprima.2.0.3.nupkg.sha512",
+        "esprima.3.0.0-beta-6.nupkg.sha512",
         "esprima.nuspec",
-        "lib/net461/Esprima.dll",
-        "lib/net461/Esprima.xml",
+        "lib/net462/Esprima.dll",
+        "lib/net462/Esprima.xml",
         "lib/netstandard2.0/Esprima.dll",
-        "lib/netstandard2.0/Esprima.xml"
+        "lib/netstandard2.0/Esprima.xml",
+        "lib/netstandard2.1/Esprima.dll",
+        "lib/netstandard2.1/Esprima.xml"
       ]
     },
-    "Jint/3.0.0-beta-2034": {
-      "sha512": "oTYgbK5wt6CrRbYbvOlNrB5+VcRfHa5nhogFctLpbMmQsICWfIbAFoA/OCezpKVOAg4NJnO0SSAIXVmcxs66nQ==",
+    "Jint/3.0.0-beta-2040": {
+      "sha512": "fxVwUfaV6c1QlQAW4r97xlxkmFSJQ3g7OdxAQ3tLhrnusLINAwZmiDv8nxx1a5ceF0aSikR0ci9mhRrNo8Irsw==",
       "type": "package",
-      "path": "jint/3.0.0-beta-2034",
+      "path": "jint/3.0.0-beta-2040",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
-        "jint.3.0.0-beta-2034.nupkg.sha512",
+        "jint.3.0.0-beta-2040.nupkg.sha512",
         "jint.nuspec",
-        "lib/net461/Jint.dll",
+        "lib/net462/Jint.dll",
         "lib/netstandard2.0/Jint.dll",
         "lib/netstandard2.1/Jint.dll"
       ]
@@ -94,7 +96,7 @@
   },
   "projectFileDependencyGroups": {
     "net6.0-windows7.0": [
-      "Jint >= 3.0.0-beta-2034",
+      "Jint >= 3.0.0-beta-2040",
       "Newtonsoft.Json >= 13.0.1"
     ]
   },
@@ -139,7 +141,7 @@
         "dependencies": {
           "Jint": {
             "target": "Package",
-            "version": "[3.0.0-beta-2034, )"
+            "version": "[3.0.0-beta-2040, )"
           },
           "Newtonsoft.Json": {
             "target": "Package",

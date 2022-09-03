@@ -8,7 +8,7 @@
     ".NETCoreApp,Version=v6.0": {
       "Calculator2/1.0.0": {
         "dependencies": {
-          "Jint": "3.0.0-beta-2034",
+          "Jint": "3.0.0-beta-2040",
           "Newtonsoft.Json": "13.0.1",
           "FastColoredTextBox": "2.16.26.0"
         },
@@ -16,17 +16,17 @@
           "Calculator2.dll": {}
         }
       },
-      "Esprima/2.0.3": {
+      "Esprima/3.0.0-beta-6": {
         "runtime": {
-          "lib/netstandard2.0/Esprima.dll": {
-            "assemblyVersion": "2.0.3.0",
-            "fileVersion": "2.0.3.0"
+          "lib/netstandard2.1/Esprima.dll": {
+            "assemblyVersion": "3.0.0.0",
+            "fileVersion": "3.0.0.0"
           }
         }
       },
-      "Jint/3.0.0-beta-2034": {
+      "Jint/3.0.0-beta-2040": {
         "dependencies": {
-          "Esprima": "2.0.3"
+          "Esprima": "3.0.0-beta-6"
         },
         "runtime": {
           "lib/netstandard2.1/Jint.dll": {
@@ -59,19 +59,19 @@
       "serviceable": false,
       "sha512": ""
     },
-    "Esprima/2.0.3": {
+    "Esprima/3.0.0-beta-6": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-OC3bLH/ENblaiFx1yCglfMpZDr4iwFXegMldzr3s3PFJq9Pw8c3kqTOIdi6Is+zn8nB79hvAbXnS19ZaaAafCg==",
-      "path": "esprima/2.0.3",
-      "hashPath": "esprima.2.0.3.nupkg.sha512"
+      "sha512": "sha512-9bhi0RrFOb7WDO2NuxibY8Zq7WaoTYAP+snnBFLobV5AuvApYTWSO9ol475IUVvYlrLU+EFOb8A/FdIamAiYTA==",
+      "path": "esprima/3.0.0-beta-6",
+      "hashPath": "esprima.3.0.0-beta-6.nupkg.sha512"
     },
-    "Jint/3.0.0-beta-2034": {
+    "Jint/3.0.0-beta-2040": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-oTYgbK5wt6CrRbYbvOlNrB5+VcRfHa5nhogFctLpbMmQsICWfIbAFoA/OCezpKVOAg4NJnO0SSAIXVmcxs66nQ==",
-      "path": "jint/3.0.0-beta-2034",
-      "hashPath": "jint.3.0.0-beta-2034.nupkg.sha512"
+      "sha512": "sha512-fxVwUfaV6c1QlQAW4r97xlxkmFSJQ3g7OdxAQ3tLhrnusLINAwZmiDv8nxx1a5ceF0aSikR0ci9mhRrNo8Irsw==",
+      "path": "jint/3.0.0-beta-2040",
+      "hashPath": "jint.3.0.0-beta-2040.nupkg.sha512"
     },
     "Newtonsoft.Json/13.0.1": {
       "type": "package",
