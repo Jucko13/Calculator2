@@ -101,7 +101,10 @@
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItemCalculationTime = new System.Windows.Forms.ToolStripMenuItem();
             this.TableButtonExtraLayout = new System.Windows.Forms.TableLayoutPanel();
+            this.button52 = new System.Windows.Forms.Button();
+            this.button53 = new System.Windows.Forms.Button();
             this.MainToolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.openLogFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.FastCode)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.FastCalculation)).BeginInit();
             this.TableButtonLayout.SuspendLayout();
@@ -159,7 +162,7 @@
             this.FastCode.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("FastCode.ServiceColors")));
             this.FastCode.ServiceLinesColor = System.Drawing.SystemColors.WindowFrame;
             this.FastCode.ShowFoldingLines = true;
-            this.FastCode.Size = new System.Drawing.Size(552, 374);
+            this.FastCode.Size = new System.Drawing.Size(552, 628);
             this.FastCode.TabIndex = 0;
             this.FastCode.Zoom = 100;
             // 
@@ -776,6 +779,7 @@
             this.button48.Name = "button48";
             this.button48.Size = new System.Drawing.Size(40, 34);
             this.button48.TabIndex = 54;
+            this.button48.Tag = "\"|\"";
             this.button48.Text = "\" \"";
             this.button48.UseVisualStyleBackColor = false;
             // 
@@ -918,7 +922,7 @@
             this.button35.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button35.Font = new System.Drawing.Font("Consolas", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.button35.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(166)))), ((int)(((byte)(26)))));
-            this.button35.Location = new System.Drawing.Point(2, 113);
+            this.button35.Location = new System.Drawing.Point(212, 76);
             this.button35.Margin = new System.Windows.Forms.Padding(2);
             this.button35.Name = "button35";
             this.button35.Size = new System.Drawing.Size(40, 33);
@@ -975,7 +979,7 @@
             this.button18.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button18.Font = new System.Drawing.Font("Consolas", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.button18.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(166)))), ((int)(((byte)(26)))));
-            this.button18.Location = new System.Drawing.Point(72, 113);
+            this.button18.Location = new System.Drawing.Point(142, 76);
             this.button18.Margin = new System.Windows.Forms.Padding(2);
             this.button18.Name = "button18";
             this.button18.Size = new System.Drawing.Size(40, 33);
@@ -1013,7 +1017,7 @@
             this.button14.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button14.Font = new System.Drawing.Font("Consolas", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.button14.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(67)))), ((int)(((byte)(181)))), ((int)(((byte)(129)))));
-            this.button14.Location = new System.Drawing.Point(282, 76);
+            this.button14.Location = new System.Drawing.Point(212, 113);
             this.button14.Margin = new System.Windows.Forms.Padding(2);
             this.button14.Name = "button14";
             this.button14.Size = new System.Drawing.Size(66, 30);
@@ -1032,7 +1036,7 @@
             this.button44.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button44.Font = new System.Drawing.Font("Consolas", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.button44.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(67)))), ((int)(((byte)(181)))), ((int)(((byte)(129)))));
-            this.button44.Location = new System.Drawing.Point(212, 76);
+            this.button44.Location = new System.Drawing.Point(142, 113);
             this.button44.Margin = new System.Windows.Forms.Padding(2);
             this.button44.Name = "button44";
             this.button44.Size = new System.Drawing.Size(66, 30);
@@ -1051,7 +1055,7 @@
             this.button43.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button43.Font = new System.Drawing.Font("Consolas", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.button43.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(67)))), ((int)(((byte)(181)))), ((int)(((byte)(129)))));
-            this.button43.Location = new System.Drawing.Point(142, 76);
+            this.button43.Location = new System.Drawing.Point(72, 113);
             this.button43.Margin = new System.Windows.Forms.Padding(2);
             this.button43.Name = "button43";
             this.button43.Size = new System.Drawing.Size(66, 30);
@@ -1219,6 +1223,7 @@
             this.FastResult.Size = new System.Drawing.Size(905, 67);
             this.FastResult.TabIndex = 4;
             this.FastResult.Zoom = 100;
+            this.FastResult.SelectionChanged += new System.EventHandler(this.FastResult_SelectionChanged);
             // 
             // CustomTabControl
             // 
@@ -1245,7 +1250,7 @@
             this.CustomTabControl.SelectedTextColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
             this.CustomTabControl.ShowClosingButton = false;
             this.CustomTabControl.ShowClosingMessage = false;
-            this.CustomTabControl.Size = new System.Drawing.Size(560, 401);
+            this.CustomTabControl.Size = new System.Drawing.Size(560, 655);
             this.CustomTabControl.TabIndex = 5;
             this.CustomTabControl.TextColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
             this.CustomTabControl.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.visualStudioTabControl1_MouseDoubleClick);
@@ -1258,7 +1263,7 @@
             this.TabPage1.Location = new System.Drawing.Point(4, 24);
             this.TabPage1.Margin = new System.Windows.Forms.Padding(0);
             this.TabPage1.Name = "TabPage1";
-            this.TabPage1.Size = new System.Drawing.Size(552, 373);
+            this.TabPage1.Size = new System.Drawing.Size(552, 627);
             this.TabPage1.TabIndex = 0;
             this.TabPage1.Text = "BigInteger.min.js";
             // 
@@ -1282,7 +1287,8 @@
             this.saveScriptsToolStripMenuItem,
             this.reloadScriptsToolStripMenuItem,
             this.openScriptsFolderToolStripMenuItem,
-            this.openLibrariesFolderToolStripMenuItem});
+            this.openLibrariesFolderToolStripMenuItem,
+            this.openLogFolderToolStripMenuItem});
             this.fileToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
@@ -1407,17 +1413,19 @@
             this.TableButtonExtraLayout.Controls.Add(this.button16, 1, 0);
             this.TableButtonExtraLayout.Controls.Add(this.button17, 1, 1);
             this.TableButtonExtraLayout.Controls.Add(this.button19, 1, 2);
-            this.TableButtonExtraLayout.Controls.Add(this.button18, 1, 3);
-            this.TableButtonExtraLayout.Controls.Add(this.button35, 0, 3);
-            this.TableButtonExtraLayout.Controls.Add(this.button43, 2, 2);
-            this.TableButtonExtraLayout.Controls.Add(this.button44, 3, 2);
-            this.TableButtonExtraLayout.Controls.Add(this.button14, 4, 2);
             this.TableButtonExtraLayout.Controls.Add(this.button32, 4, 1);
             this.TableButtonExtraLayout.Controls.Add(this.button31, 4, 0);
             this.TableButtonExtraLayout.Controls.Add(this.button13, 2, 0);
             this.TableButtonExtraLayout.Controls.Add(this.button34, 3, 0);
             this.TableButtonExtraLayout.Controls.Add(this.button33, 3, 1);
             this.TableButtonExtraLayout.Controls.Add(this.button46, 2, 1);
+            this.TableButtonExtraLayout.Controls.Add(this.button35, 6, 2);
+            this.TableButtonExtraLayout.Controls.Add(this.button18, 4, 2);
+            this.TableButtonExtraLayout.Controls.Add(this.button52, 8, 2);
+            this.TableButtonExtraLayout.Controls.Add(this.button53, 0, 3);
+            this.TableButtonExtraLayout.Controls.Add(this.button14, 6, 3);
+            this.TableButtonExtraLayout.Controls.Add(this.button44, 4, 3);
+            this.TableButtonExtraLayout.Controls.Add(this.button43, 2, 3);
             this.TableButtonExtraLayout.Location = new System.Drawing.Point(2, 388);
             this.TableButtonExtraLayout.Name = "TableButtonExtraLayout";
             this.TableButtonExtraLayout.RowCount = 10;
@@ -1434,11 +1442,59 @@
             this.TableButtonExtraLayout.Size = new System.Drawing.Size(351, 370);
             this.TableButtonExtraLayout.TabIndex = 7;
             // 
+            // button52
+            // 
+            this.button52.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(33)))), ((int)(((byte)(36)))));
+            this.TableButtonExtraLayout.SetColumnSpan(this.button52, 2);
+            this.button52.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(166)))), ((int)(((byte)(26)))));
+            this.button52.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(107)))), ((int)(((byte)(68)))), ((int)(((byte)(37)))));
+            this.button52.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(44)))), ((int)(((byte)(24)))));
+            this.button52.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button52.Font = new System.Drawing.Font("Consolas", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.button52.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(166)))), ((int)(((byte)(26)))));
+            this.button52.Location = new System.Drawing.Point(282, 76);
+            this.button52.Margin = new System.Windows.Forms.Padding(2);
+            this.button52.Name = "button52";
+            this.button52.Size = new System.Drawing.Size(40, 33);
+            this.button52.TabIndex = 50;
+            this.button52.Tag = "Math.pow(|,)";
+            this.button52.Text = "a^b";
+            this.button52.UseVisualStyleBackColor = false;
+            // 
+            // button53
+            // 
+            this.button53.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(33)))), ((int)(((byte)(36)))));
+            this.TableButtonExtraLayout.SetColumnSpan(this.button53, 2);
+            this.button53.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(166)))), ((int)(((byte)(26)))));
+            this.button53.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(107)))), ((int)(((byte)(68)))), ((int)(((byte)(37)))));
+            this.button53.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(44)))), ((int)(((byte)(24)))));
+            this.button53.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button53.Font = new System.Drawing.Font("Consolas", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.button53.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(166)))), ((int)(((byte)(26)))));
+            this.button53.Location = new System.Drawing.Point(2, 113);
+            this.button53.Margin = new System.Windows.Forms.Padding(2);
+            this.button53.Name = "button53";
+            this.button53.Size = new System.Drawing.Size(66, 33);
+            this.button53.TabIndex = 50;
+            this.button53.Tag = "Math.random()|";
+            this.button53.Text = "rnd";
+            this.button53.UseVisualStyleBackColor = false;
+            // 
+            // openLogFolderToolStripMenuItem
+            // 
+            this.openLogFolderToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.openLogFolderToolStripMenuItem.Image = global::Calculator2.Properties.Resources.OpenFolder_16x;
+            this.openLogFolderToolStripMenuItem.Name = "openLogFolderToolStripMenuItem";
+            this.openLogFolderToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.H)));
+            this.openLogFolderToolStripMenuItem.Size = new System.Drawing.Size(259, 22);
+            this.openLogFolderToolStripMenuItem.Text = "Open Log Folder";
+            this.openLogFolderToolStripMenuItem.Click += new System.EventHandler(this.openLogFolderToolStripMenuItem_Click);
+            // 
             // FrmMain
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(33)))), ((int)(((byte)(36)))));
-            this.ClientSize = new System.Drawing.Size(912, 537);
+            this.ClientSize = new System.Drawing.Size(912, 791);
             this.Controls.Add(this.TableButtonExtraLayout);
             this.Controls.Add(this.CustomTabControl);
             this.Controls.Add(this.FastResult);
@@ -1471,7 +1527,6 @@
         #endregion
 
         private FastColoredTextBoxNS.FastColoredTextBox FastCode;
-        private FastColoredTextBoxNS.FastColoredTextBox FastCalculation;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.TableLayoutPanel TableButtonLayout;
         private System.Windows.Forms.Button button2;
@@ -1510,13 +1565,11 @@
         private System.Windows.Forms.Button button38;
         private System.Windows.Forms.Button button39;
         private System.Windows.Forms.Button button40;
-        private FastColoredTextBoxNS.FastColoredTextBox FastResult;
         private System.Windows.Forms.Button button43;
         private System.Windows.Forms.Button button44;
         private System.Windows.Forms.Button button45;
         private VisualStudioTabControl CustomTabControl;
         private System.Windows.Forms.TabPage TabPage1;
-        private CustomMenuStrip customMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveScriptsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem reloadScriptsToolStripMenuItem;
@@ -1542,6 +1595,12 @@
         private System.Windows.Forms.ToolStripMenuItem executeCalculationOnSaveToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem githubToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
+        public FastColoredTextBoxNS.FastColoredTextBox FastCalculation;
+        public FastColoredTextBoxNS.FastColoredTextBox FastResult;
+        public CustomMenuStrip customMenuStrip1;
+        private System.Windows.Forms.Button button52;
+        private System.Windows.Forms.Button button53;
+        private System.Windows.Forms.ToolStripMenuItem openLogFolderToolStripMenuItem;
     }
 }
 

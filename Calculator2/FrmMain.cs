@@ -97,7 +97,7 @@ namespace Calculator2
         private MarkerStyle bracketMarkerStyle = new MarkerStyle(new SolidBrush(Color.FromArgb(50, 255, 255, 255)));
 
         private List<string> customFunctionNames = new List<string>();
-
+        private Font buttonFont = new Font("Cascadia Mono Light", 10.0f, FontStyle.Regular);
 
 
         private void InitializeButtonsInTableLayout(TableLayoutPanel panel)
@@ -106,7 +106,7 @@ namespace Calculator2
             {
                 button.Dock = DockStyle.Fill;
                 button.Click += TableButton_Click;
-                button.Font = new Font("Cascadia Mono Light", 10.0f, FontStyle.Regular);
+                button.Font = buttonFont;
                 button.Padding = Padding.Empty;
                 button.Margin = new Padding(2);
             }
@@ -230,7 +230,7 @@ namespace Calculator2
             {
                 Settings.Default.Save();
 
-                //Highperformance
+                Toolbox.Logging.HighPerformanceFileWriter.Log(FastCalculation.Text + " = " + FastResult.Text, "Calculations", false);
             }
         }
 
@@ -394,7 +394,7 @@ namespace Calculator2
             {
                 var button = new Button()
                 {
-                    Font = Font,
+                    Font = buttonFont,
                     BackColor = this.BackColor,
                     ForeColor = item.Color.Color,
                     FlatStyle = FlatStyle.Flat,
@@ -466,6 +466,7 @@ namespace Calculator2
             engine.SetValue("Clipboard", TypeReference.CreateTypeReference(engine, typeof(Clipboard)));
             engine.SetValue("DateTime", TypeReference.CreateTypeReference<DateTime>(engine));
             engine.SetValue("TimeSpan", TypeReference.CreateTypeReference<TimeSpan>(engine));
+            engine.SetValue("MessageBox", TypeReference.CreateTypeReference<MessageBox>(engine));
 
             if (!Directory.Exists(folderLibraries))
             {
@@ -759,8 +760,28 @@ namespace Calculator2
 
                 //var test = script.ChildNodes.OfType<Esprima.Ast.TemplateElement>().ToList();
 
+                //var customObjects = script.ChildNodes.OfType<VariableDeclaration>().Select(x => ((Identifier)((VariableDeclarator)x.ChildNodes.First()).Id).Name).ToArray();
+
+                var customObjects = script.ChildNodes.OfType<VariableDeclaration>().Select(x =>
+                {
+                    var declaration = (VariableDeclarator)x.ChildNodes.First();
+                    if (declaration.Init is ObjectExpression o)
+                    {
+                        return new { Name = ((Identifier)declaration.Id).Name, Properties = o.Properties.Select(y => ((Identifier)((Property)y).Key).Name).ToArray() };
+                    }
+                    return null;
+                }
+                ).Where(x => x != null).ToArray();
+
+                //string eval = "return JSON.stringify([" + string.Join(", ", customObjects) + "].map(x => Reflect.ownKeys(x)));";
+                //engine.Evaluate(script);
+                //string[][] customObjectProperties = JsonConvert.DeserializeObject<string[][]>(engine.Evaluate(eval)?.ToString() ?? "[[]]"); //JsValue result = 
+
+                //var customObjectNames = parser.ParseScript($"{stringBuilder} return JSON.stringify({FastCalculation.Text});");
+
                 //keep track of the array objects and add some functionality to the autocomplete menu
-                string arrayObjects = "hi|what"; // string.Join('|', script.ChildNodes.OfType<VariableDeclaration>().Where(x => (((VariableDeclarator)x.ChildNodes[0]).Init?.Type ?? Nodes.WhileStatement) == Nodes.ArrayExpression).Select(x => ((Identifier)((VariableDeclarator)x.ChildNodes[0]).Id).Name ?? "").ToArray());
+                //"hi|what"; // 
+                string arrayObjects = string.Join('|', script.ChildNodes.OfType<VariableDeclaration>().Where(x => (((VariableDeclarator)x.ChildNodes.First()).Init?.Type ?? Nodes.WhileStatement) == Nodes.ArrayExpression).Select(x => ((Identifier)((VariableDeclarator)x.ChildNodes.First()).Id).Name ?? "").ToArray());
                 autocompleteArrayObjects.ForEach(x => x.SetObjectText(arrayObjects));
 
 
@@ -896,7 +917,10 @@ namespace Calculator2
             if (JScriptKeywordRegex != null) range.SetStyle(textStyles[7], JScriptKeywordRegex);
             range.SetStyle(textStyles[5], operatorRegex);
 
-
+            range.SetStyle(textStyles[0], @"//.*$", RegexOptions.Multiline);
+            range.SetStyle(textStyles[0], @"(/\*.*?\*/)|(/\*.*)", RegexOptions.Singleline);
+            range.SetStyle(textStyles[0], @"(/\*.*?\*/)|(.*\*/)", RegexOptions.Singleline |
+                        RegexOptions.RightToLeft);
 
             StyleIndex[] styleIndexes = criteriaStyleRainbow.Select(x => textBox.GetStyleIndexMask(new Style[] { x })).ToArray();
 
@@ -1102,6 +1126,11 @@ namespace Calculator2
             Process.Start("explorer.exe", folderLibraries);
         }
 
+        private void openLogFolderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Process.Start("explorer.exe", Toolbox.Logging.HighPerformanceFileWriter.LogFolder);
+        }
+
         private void executeCalculationOnSaveToolStripMenuItem_Click(object sender, EventArgs e)
         {
             executeCalculationOnSaveToolStripMenuItem.Checked = !executeCalculationOnSaveToolStripMenuItem.Checked;
@@ -1129,5 +1158,12 @@ When using it for your own projects, make sure to give proper credit where neede
             };
             Process.Start(psi);
         }
+
+        private void FastResult_SelectionChanged(object sender, EventArgs e)
+        {
+            
+        }
+
+       
     }
 }

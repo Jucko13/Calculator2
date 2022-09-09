@@ -31,6 +31,15 @@
         "runtime": {
           "lib/netstandard2.0/Newtonsoft.Json.dll": {}
         }
+      },
+      "Toolbox/1.0.0": {
+        "type": "project",
+        "compile": {
+          "bin/placeholder/Toolbox.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Toolbox.dll": {}
+        }
       }
     }
   },
@@ -92,12 +101,18 @@
         "newtonsoft.json.nuspec",
         "packageIcon.png"
       ]
+    },
+    "Toolbox/1.0.0": {
+      "type": "project",
+      "path": "../Toolbox/Toolbox.csproj",
+      "msbuildProject": "../Toolbox/Toolbox.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net6.0-windows7.0": [
       "Jint >= 3.0.0-beta-2040",
-      "Newtonsoft.Json >= 13.0.1"
+      "Newtonsoft.Json >= 13.0.1",
+      "Toolbox >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -126,7 +141,11 @@
       "frameworks": {
         "net6.0-windows7.0": {
           "targetAlias": "net6.0-windows",
-          "projectReferences": {}
+          "projectReferences": {
+            "D:\\Ricardo\\Github\\Calculator2\\Toolbox\\Toolbox.csproj": {
+              "projectPath": "D:\\Ricardo\\Github\\Calculator2\\Toolbox\\Toolbox.csproj"
+            }
+          }
         }
       },
       "warningProperties": {

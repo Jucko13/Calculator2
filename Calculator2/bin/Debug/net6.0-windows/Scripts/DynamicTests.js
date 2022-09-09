@@ -7,20 +7,27 @@ function splitClipboard(splitCharacter){
 }
 
 
-var i = [10, 20];
+var i = [10, 20, [30, 40, [50, 60]]];
 var k = [30, 50];
 
-function timeDifference(time1, time2){ //timeDifference("22:11:22", "05:33:44") = "16:37:38"
-    var timespan = new Date(time1) - new Date(time2);
-    return (timespan < TimeSpan.Zero ? '-' : '') + timespan.toString("hh\\:mm\\:ss");
+function fun(){
+    return ('b' + 'a' + + 'a' + 'a').toLowerCase()
 }
 
 
-function getplctime(inputtime){
-    var hundredsSeconds = (inputtime & 0xff); //1/100th of a second
-    var seconds         = ((inputtime >> 8) & 0xff);
-    var minutes         = ((inputtime >> 16) & 0xff);
-    var hours           = ((inputtime >> 24) & 0xff);
+
+function CaptureSelection(){
+    //MessageBox.Show("what");
+    var ToolBox = importNamespace('Toolbox');
+    var Logging = importNamespace('Toolbox.Logging');
+    var Log     = new Logging.ApplicationLog();
     
-    return hours + ":" + minutes + ":" + seconds + "." + hundredsSeconds;
+    MessageBox.Show(Log.GetSystemTimeMS());
+    return Logging.ApplicationLog.GetSystemTimeMS();
+    //Form.FastResult.SelectionChanged += changed;
+}
+
+function changed(a, b){
+    MessageBox.Show("what");
+    Form.FastCalculation.Text = a.SelectedText;
 }

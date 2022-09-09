@@ -69,16 +69,30 @@ function hslToRgb(h, s, l){
 }
 
 //From https://stackoverflow.com/questions/36098913/convert-seconds-to-days-hours-minutes-and-seconds
-function printTime(seconds){
+function printTime(seconds){ // printTime(86401.005) = "1 day, 1 second, 5 milliseconds"
 	seconds = Number(seconds);
+	var negative = false;
+	if(seconds < 0){
+		seconds = -seconds;
+		negative = true;
+	}
+	
 	var d = Math.floor(seconds / (3600*24));
 	var h = Math.floor(seconds % (3600*24) / 3600);
 	var m = Math.floor(seconds % 3600 / 60);
 	var s = Math.floor(seconds % 60);
-
-	var dDisplay = d > 0 ? d + (d == 1 ? " day, " : " days, ") : "";
-	var hDisplay = h > 0 ? h + (h == 1 ? " hour, " : " hours, ") : "";
-	var mDisplay = m > 0 ? m + (m == 1 ? " minute, " : " minutes, ") : "";
+	var ms = (seconds % 1).toFixed(3) * 1000;
+	
+	var dDisplay = d > 0 ? d + (d == 1 ? " day" : " days") : "";
+	var hDisplay = h > 0 ? h + (h == 1 ? " hour" : " hours") : "";
+	var mDisplay = m > 0 ? m + (m == 1 ? " minute" : " minutes") : "";
 	var sDisplay = s > 0 ? s + (s == 1 ? " second" : " seconds") : "";
-	return dDisplay + hDisplay + mDisplay + sDisplay;
+	var msDisplay = ms > 0 ? ms + (ms == 1 ? " millisecond" : " milliseconds") : "";
+	
+	return (negative ? "-" : "") + [dDisplay, hDisplay, mDisplay, sDisplay, msDisplay].filter(x => x.length > 0).join(", ");
+}
+
+function timeDifference(time1, time2){ //timeDifference("22:11:22", "05:33:44") = "16:37:38"
+    var timespan = new Date(time1) - new Date(time2);
+    return (timespan < TimeSpan.Zero ? '-' : '') + timespan.toString("hh\\:mm\\:ss");
 }

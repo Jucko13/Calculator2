@@ -52,6 +52,17 @@ Array.prototype.average = function(){
     return this.sum() / this.length;
 };
 
+Array.prototype.median = function(){
+    const sorted = Array.from(this).sort((a, b) => a - b);
+    const middle = Math.floor(sorted.length / 2);
+
+    if (sorted.length % 2 === 0) {
+        return (sorted[middle - 1] + sorted[middle]) / 2;
+    }
+
+    return sorted[middle];
+};
+
 Array.prototype.sum = function(){
     return this.reduce( ( p, c ) => +p + +c, 0 );
 };
@@ -75,3 +86,43 @@ Array.prototype.shuffle = function(b,c,d){//placeholder,placeholder,placeholder
     return this;
 }
 
+
+String.prototype.stupify = function(){
+    var offset = 0;
+    return Array.from(this).map((x,i) => {
+        if(x == " ") offset--;
+        return (i + offset) % 2 == 1 ? x.toUpperCase() : x.toLowerCase();
+        }).join("");
+}
+    
+var Mathd = {
+    sin: function(number){
+        return Math.sin(degToRad(number));
+    },
+    cos: function(number){
+        return Math.cos(degToRad(number));
+    },
+    tan: function(number){
+        return Math.tan(degToRad(number));
+    },
+    asin: function(number){
+        return radToDeg(Math.asin(number));
+    },
+    acos: function(number){
+       return radToDeg(Math.acos(number));
+    },
+    atan: function(number){
+       return radToDeg(Math.atan(number));
+    }
+};
+
+var PLC = {
+    convertTime: function (inputtime){
+        var hundredsSeconds = (inputtime & 0xff); //1/100th of a second
+        var seconds         = ((inputtime >> 8) & 0xff);
+        var minutes         = ((inputtime >> 16) & 0xff);
+        var hours           = ((inputtime >> 24) & 0xff);
+        
+        return hours + ":" + minutes + ":" + seconds + "." + hundredsSeconds;
+    }
+}

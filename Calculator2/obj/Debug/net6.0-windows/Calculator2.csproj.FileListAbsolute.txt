@@ -46,3 +46,8 @@ D:\Ricardo\Github\Calculator2\Calculator2\bin\Debug\net6.0-windows\FastColoredTe
 D:\Ricardo\Github\Calculator2\Calculator2\obj\Debug\net6.0-windows\Calculator2.Properties.Resources.resources
 D:\Ricardo\Github\Calculator2\Calculator2\obj\Debug\net6.0-windows\Calculator2.csproj.CopyComplete
 D:\Ricardo\Github\Calculator2\Calculator2\obj\Debug\net6.0-windows\refint\Calculator2.dll
+D:\Ricardo\Github\Calculator2\Calculator2\bin\Debug\net6.0-windows\Toolbox.dll
+D:\Ricardo\Github\Calculator2\Calculator2\bin\Debug\net6.0-windows\EPPlus.dll
+D:\Ricardo\Github\Calculator2\Calculator2\bin\Debug\net6.0-windows\Toolbox.pdb
+D:\Ricardo\Github\Calculator2\Calculator2\bin\Debug\net6.0-windows\Toolbox.dll.config
+D:\Ricardo\Github\Calculator2\Calculator2\bin\Debug\net6.0-windows\EPPlus.xml
