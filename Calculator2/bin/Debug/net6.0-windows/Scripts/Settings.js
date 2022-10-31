@@ -56,5 +56,12 @@ var programButtons = [
         Color : rgbToHex(15, 190, 0xe3),
         Colspan: 1,
         TooltipText : "Opens the .Net ColorDialog"
+    },
+    { 
+        Text: "[,]",
+        Action: "[|,]",
+        Color : rgbToHex(67, 181, 129),
+        Colspan: 2,
+        TooltipText : "Encapsulates the selection in brackets and adds a coma"
     }
 ];
