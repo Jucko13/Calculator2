@@ -14,6 +14,15 @@ function fun(){
     return ('b' + 'a' + + 'a' + 'a').toLowerCase()
 }
 
+function Lasal()
+{
+    var res = Clipboard.GetText().substring(3).replace(/[A-Z]/g, ' $&').trim().toLowerCase();
+    res     = res.charAt(0).toUpperCase() + res.substring(1);
+    Clipboard.Clear();
+    Clipboard.SetText(res);
+    return res;
+}
+
 function CaptureSelection(){
     //MessageBox.Show("what");
     var t = importNamespace('Toolbox.Logging');
