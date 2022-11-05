@@ -28,6 +28,7 @@ using System.Xml;
 using Newtonsoft.Json;
 using System.Security.AccessControl;
 using Jint.Runtime.Interop;
+using Toolbox.Helper;
 
 namespace Calculator2
 {
@@ -114,7 +115,7 @@ namespace Calculator2
 
         private void FrmMain_Load(object sender, EventArgs e)
         {
-            
+
 
             InitializeButtonsInTableLayout(TableButtonLayout);
             InitializeButtonsInTableLayout(TableButtonExtraLayout);
@@ -168,7 +169,7 @@ namespace Calculator2
             FastCalculation.Text = Settings.Default.Calculation;
             FastResult.Text = Settings.Default.Result;
 
-            if(Settings.Default.FormWidth > 100 && Settings.Default.FormHeight > 100)
+            if (Settings.Default.FormWidth > 100 && Settings.Default.FormHeight > 100)
             {
                 Width = Settings.Default.FormWidth;
                 Height = Settings.Default.FormHeight;
@@ -274,6 +275,8 @@ namespace Calculator2
 
         private List<AutocompleteMenu> autocompleteMenus = new List<AutocompleteMenu>();
 
+
+
         private void InitializeTextBox(FastColoredTextBox textBox, bool multiline = false)
         {
             if (multiline)
@@ -341,16 +344,18 @@ namespace Calculator2
 
             AutocompleteMenu autocompleteMenu = new AutocompleteMenu(textBox)
             {
-                MinFragmentLength = 1,
+                MinFragmentLength = 0,
                 AllowTabKey = true,
                 AppearInterval = 1,
                 SearchPattern = @"([\w\.\[\], ])",
                 MinimumSize = new Size(200, 200),
                 AlwaysShowTooltip = true,
                 ToolTipDuration = 1000000,
+                
             };
 
             autocompleteMenu.Items.SetAutocompleteItems(autocompleteItems);
+            autocompleteMenus.Add(autocompleteMenu);
         }
 
 
@@ -448,16 +453,18 @@ namespace Calculator2
                     }
                 });
 
-            engine = new Jint.Engine((e, o) => {
-                o.AllowClr();
+            engine = new Jint.Engine((e, o) =>
+            {
+                o.AllowClr(typeof(Toolbox.Logging.ApplicationLog).Assembly);
                 o.AllowClrWrite(true);
                 o.AllowOperatorOverloading(true);
+                o.Interop.Enabled = true;
                 o.Interop.AllowGetType = true;
                 o.Interop.AllowSystemReflection = true;
                 o.Interop.SerializeToJson = Serialize;
                 //o.TimeoutInterval(TimeSpan.FromSeconds(10));
             });
-            
+
             engine.SetValue("Color", TypeReference.CreateTypeReference<Color>(engine));
             engine.SetValue("LoadExtraButtons", (MethodInvoker)(() => LoadExtraButtons()));
             engine.SetValue("colorPicker", colorDialog);
@@ -467,6 +474,7 @@ namespace Calculator2
             engine.SetValue("DateTime", TypeReference.CreateTypeReference<DateTime>(engine));
             engine.SetValue("TimeSpan", TypeReference.CreateTypeReference<TimeSpan>(engine));
             engine.SetValue("MessageBox", TypeReference.CreateTypeReference<MessageBox>(engine));
+            engine.SetValue("BigDecimal", TypeReference.CreateTypeReference<BigDecimal>(engine));
 
             if (!Directory.Exists(folderLibraries))
             {
@@ -484,7 +492,7 @@ namespace Calculator2
 
                 try
                 {
-                    
+
                     if (!initialize)
                     {
                         FastResult.Text = $"Loading library {i}/{files.Length}: '{libraryName}'";
@@ -513,11 +521,11 @@ namespace Calculator2
 
             }
 
-            if(errorTexts.Count > 0)
+            if (errorTexts.Count > 0)
             {
                 FastResult.Text = string.Join("\n", errorTexts);
             }
-            else if(!initialize)
+            else if (!initialize)
             {
                 FastResult.Text = "Libraries loaded";
             }
@@ -758,10 +766,6 @@ namespace Calculator2
 
                 var newCustomFunctionNames = script.ChildNodes.OfType<FunctionDeclaration>().Select(x => x.Id?.Name).Where(x => x != null).OrderBy(x => x).ToList();
 
-                //var test = script.ChildNodes.OfType<Esprima.Ast.TemplateElement>().ToList();
-
-                //var customObjects = script.ChildNodes.OfType<VariableDeclaration>().Select(x => ((Identifier)((VariableDeclarator)x.ChildNodes.First()).Id).Name).ToArray();
-
                 var customObjects = script.ChildNodes.OfType<VariableDeclaration>().Select(x =>
                 {
                     var declaration = (VariableDeclarator)x.ChildNodes.First();
@@ -773,14 +777,18 @@ namespace Calculator2
                 }
                 ).Where(x => x != null).ToArray();
 
-                //string eval = "return JSON.stringify([" + string.Join(", ", customObjects) + "].map(x => Reflect.ownKeys(x)));";
-                //engine.Evaluate(script);
-                //string[][] customObjectProperties = JsonConvert.DeserializeObject<string[][]>(engine.Evaluate(eval)?.ToString() ?? "[[]]"); //JsValue result = 
+                autocompleteItemsUserCode = customObjects
+                    .SelectMany(x => x.Properties
+                        .Select(y => (AutocompleteItem) new ObjectPropertyAutoComplete(y, x.Name)
+                        {
+                            //ToolTipText = "Converts any object to a readable string",
+                            //ToolTipTitle = "JSON.Stringify(value: object) : " + typeof(string).Name
+                        }).Append(new AutocompleteItemTrim(x.Name))
+                    ).ToList();
 
-                //var customObjectNames = parser.ParseScript($"{stringBuilder} return JSON.stringify({FastCalculation.Text});");
+                autocompleteMenus.ForEach(x => x.Items.SetAutocompleteItems(autocompleteItems.Concat(autocompleteItemsUserCode)));
 
-                //keep track of the array objects and add some functionality to the autocomplete menu
-                //"hi|what"; // 
+
                 string arrayObjects = string.Join('|', script.ChildNodes.OfType<VariableDeclaration>().Where(x => (((VariableDeclarator)x.ChildNodes.First()).Init?.Type ?? Nodes.WhileStatement) == Nodes.ArrayExpression).Select(x => ((Identifier)((VariableDeclarator)x.ChildNodes.First()).Id).Name ?? "").ToArray());
                 autocompleteArrayObjects.ForEach(x => x.SetObjectText(arrayObjects));
 
@@ -827,11 +835,13 @@ namespace Calculator2
                     filePage.TextBox.Range.ClearStyle(criteriaStyleWavyLine);
                 }
 
-                stringBuilder.AppendLine($"var ans = \"{FastResult.Text.Replace("\"","\\\"")}\";");
+                stringBuilder.AppendLine($"var ans = \"{FastResult.Text.Replace("\"", "\\\"")}\";");
 
                 FastCalculation.Range.ClearStyle(criteriaStyleWavyLine);
 
-                string toCalculate = $"{stringBuilder}return JSON.stringify({FastCalculation.Text});";
+                string inputText = FastCalculation.Text.Trim();
+
+                string toCalculate = $"{stringBuilder}return JSON.stringify({(inputText.Length == 0 ? "undefined" : inputText)}, stringifyReplacer);";
                 JsValue result = engine.Evaluate(toCalculate);
 
                 //JsValue result = engine.Evaluate(script);
@@ -1007,13 +1017,13 @@ namespace Calculator2
 
                 SaveFiles();
             }
-            else if(e.KeyCode == Keys.F5)
+            else if (e.KeyCode == Keys.F5)
             {
                 ExecuteCode();
             }
-            else if(e.KeyData == (Keys.Control | Keys.Space))
+            else if (e.KeyData == (Keys.Control | Keys.Space))
             {
-                
+
             }
         }
 
@@ -1057,17 +1067,18 @@ namespace Calculator2
 
         private void helpToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            
+
         }
 
         private void githubToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            
+
 
         }
 
 
         private List<AutocompleteItem> autocompleteItems = null;
+        private List<AutocompleteItem> autocompleteItemsUserCode = null;
         private List<ObjectPropertyAutoComplete> autocompleteArrayObjects = null;
         private void InitializeAutoComplete()
         {
@@ -1086,6 +1097,8 @@ namespace Calculator2
                 "log2()", "max()", "min()", "pow()", "random()", "round()", "sign()", "sin()", "sinh()", "sqrt()", "tan()", "tanh()", "trunc()"}
             .ForEach(x => autocompleteItems.Add(new ObjectPropertyAutoComplete(x, "Math"))); //x.Replace("()", "")
 
+            autocompleteItems.Add(new AutocompleteItemTrim("Math"));
+
 
             autocompleteArrayObjects = new List<ObjectPropertyAutoComplete>();
 
@@ -1099,7 +1112,11 @@ namespace Calculator2
             autocompleteItems.AddRange(autocompleteArrayObjects);
 
             autocompleteItems = autocompleteItems.OrderBy(x => x.ToolTipTitle).ToList();
+
         }
+
+
+
 
         private void saveScriptsToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1161,9 +1178,14 @@ When using it for your own projects, make sure to give proper credit where neede
 
         private void FastResult_SelectionChanged(object sender, EventArgs e)
         {
-            
+
         }
 
-       
+        private void MainToolTip_Draw(object sender, DrawToolTipEventArgs e)
+        {
+            e.DrawBackground();
+            e.DrawBorder();
+            e.DrawText();
+        }
     }
 }

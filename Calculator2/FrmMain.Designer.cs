@@ -93,6 +93,7 @@
             this.reloadScriptsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openScriptsFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openLibrariesFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openLogFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.preferencesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.executeCalculationOnSaveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItemLibrariesLoaded = new System.Windows.Forms.ToolStripMenuItem();
@@ -104,7 +105,6 @@
             this.button52 = new System.Windows.Forms.Button();
             this.button53 = new System.Windows.Forms.Button();
             this.MainToolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.openLogFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.FastCode)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.FastCalculation)).BeginInit();
             this.TableButtonLayout.SuspendLayout();
@@ -143,7 +143,6 @@
             this.FastCode.CharWidth = 8;
             this.FastCode.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.FastCode.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
-            this.FastCode.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.FastCode.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.FastCode.IndentBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(33)))), ((int)(((byte)(36)))));
             this.FastCode.IsReplaceMode = false;
@@ -193,6 +192,7 @@
             this.FastCalculation.CharWidth = 8;
             this.FastCalculation.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.FastCalculation.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.FastCalculation.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.FastCalculation.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.FastCalculation.IsReplaceMode = false;
             this.FastCalculation.Language = FastColoredTextBoxNS.Language.JS;
@@ -1205,7 +1205,6 @@
             this.FastResult.CharWidth = 8;
             this.FastResult.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.FastResult.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
-            this.FastResult.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.FastResult.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.FastResult.IsReplaceMode = false;
             this.FastResult.Language = FastColoredTextBoxNS.Language.JS;
@@ -1333,6 +1332,16 @@
             this.openLibrariesFolderToolStripMenuItem.Size = new System.Drawing.Size(259, 22);
             this.openLibrariesFolderToolStripMenuItem.Text = "Open Libraries Folder";
             this.openLibrariesFolderToolStripMenuItem.Click += new System.EventHandler(this.openLibrariesFolderToolStripMenuItem_Click);
+            // 
+            // openLogFolderToolStripMenuItem
+            // 
+            this.openLogFolderToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.openLogFolderToolStripMenuItem.Image = global::Calculator2.Properties.Resources.OpenFolder_16x;
+            this.openLogFolderToolStripMenuItem.Name = "openLogFolderToolStripMenuItem";
+            this.openLogFolderToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.H)));
+            this.openLogFolderToolStripMenuItem.Size = new System.Drawing.Size(259, 22);
+            this.openLogFolderToolStripMenuItem.Text = "Open Log Folder";
+            this.openLogFolderToolStripMenuItem.Click += new System.EventHandler(this.openLogFolderToolStripMenuItem_Click);
             // 
             // preferencesToolStripMenuItem
             // 
@@ -1480,15 +1489,12 @@
             this.button53.Text = "rnd";
             this.button53.UseVisualStyleBackColor = false;
             // 
-            // openLogFolderToolStripMenuItem
+            // MainToolTip
             // 
-            this.openLogFolderToolStripMenuItem.ForeColor = System.Drawing.Color.White;
-            this.openLogFolderToolStripMenuItem.Image = global::Calculator2.Properties.Resources.OpenFolder_16x;
-            this.openLogFolderToolStripMenuItem.Name = "openLogFolderToolStripMenuItem";
-            this.openLogFolderToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.H)));
-            this.openLogFolderToolStripMenuItem.Size = new System.Drawing.Size(259, 22);
-            this.openLogFolderToolStripMenuItem.Text = "Open Log Folder";
-            this.openLogFolderToolStripMenuItem.Click += new System.EventHandler(this.openLogFolderToolStripMenuItem_Click);
+            this.MainToolTip.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.MainToolTip.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.MainToolTip.OwnerDraw = true;
+            this.MainToolTip.Draw += new System.Windows.Forms.DrawToolTipEventHandler(this.MainToolTip_Draw);
             // 
             // FrmMain
             // 
