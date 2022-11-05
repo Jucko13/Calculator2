@@ -60,7 +60,7 @@ var programButtons = [
     { 
         Text: "[,]",
         Action: "[|,]",
-        Color : rgbToHex(67, 181, 129),
+        Color : Lib.rgbToHex(67, 181, 129),
         Colspan: 2,
         TooltipText : "Encapsulates the selection in brackets and adds a coma"
     }

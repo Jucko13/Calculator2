@@ -34,8 +34,8 @@ Array.prototype.max = function(){
     return this.reduce( ( p, c ) => Math.max(p,c));
 };
 
-Array.prototype.hex = function(padding = 0, prefix = ""){
-    return this.map(x => prefix + x.toString(16).padStart(padding, 0));
+Array.prototype.hex = function(padding = 0, prefix = "", suffix = ""){
+    return this.map(x => prefix + x.toString(16).padStart(padding, 0) + suffix);
 };
 
 //https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array

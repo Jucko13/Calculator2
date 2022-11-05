@@ -168,6 +168,14 @@ var PLC = {
         var hours           = ((inputtime >> 24) & 0xff);
         
         return hours + ":" + minutes + ":" + seconds + "." + hundredsSeconds;
+    },
+    srvNameToText: function(inp){
+        var inp = inp || Clipboard.GetText();
+        var res = inp.substring(3).replace(/[A-Z]/g, ' $&').trim().toLowerCase();
+        res     = res.charAt(0).toUpperCase() + res.substring(1);
+        Clipboard.Clear();
+        Clipboard.SetText(res);
+        return res;
     }
 };
 
