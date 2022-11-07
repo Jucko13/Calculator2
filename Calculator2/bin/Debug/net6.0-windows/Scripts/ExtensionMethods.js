@@ -1,47 +1,6 @@
 
-function SetFormBackgroundColor(){
-    //Form.BackColor = color.FromArgb(10,255,10);
-    var what       = "";
-
-    for(var i = 0; i < Form.Controls.Count; i++)
-    {
-        what += Form.Controls[i].Name + " ";
-    }
-    return what;
-}
-
-
 //var color = importNamespace("System.Drawing.Color");
 
-function pickColor(initialColor){
-    colorPicker.Color         = initialColor ?? colorPicker.Color;
-    colorPicker.AllowFullOpen = true;
-    colorPicker.AnyColor      = true;
-    colorPicker.FullOpen      = true;
-    colorPicker.ShowDialog();
-    
-    var colorVariants = "Color.FromArgb(" + colorPicker.Color.R + ", " + colorPicker.Color.G + ", " + colorPicker.Color.B + ");";
-    colorVariants += " | " + rgbToHex(colorPicker.Color.R,colorPicker.Color.G,colorPicker.Color.B);
-    colorVariants += " | " + colorPicker.Color.R + "; " + colorPicker.Color.G + "; " + colorPicker.Color.B;
-    
-    return colorVariants;
-}
-
-function LogB(base, log){
-    return Math.log(log) / Math.log(base);
-}
-
-function radToDeg(angle){
-    return angle / Math.PI * 180;
-}
-
-function degToRad(angle){
-    return angle / 180 * Math.PI;
-}
-
-function rgbToHex(r, g, b){
-    return "#" + r.toString(16).padStart(2, '0') + g.toString(16).padStart(2, '0') + b.toString(16).padStart(2, '0');
-}
 
 
 Array.prototype.lengthNotNull = function(){
@@ -75,8 +34,8 @@ Array.prototype.max = function(){
     return this.reduce( ( p, c ) => Math.max(p,c));
 };
 
-Array.prototype.hex = function(padding = 0, prefix = ""){
-return this.map(x => prefix + x.toString(16).padStart(padding, 0));
+Array.prototype.hex = function(padding = 0, prefix = "", suffix = ""){
+    return this.map(x => prefix + x.toString(16).padStart(padding, 0) + suffix);
 };
 
 //https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
@@ -84,45 +43,23 @@ Array.prototype.shuffle = function(b,c,d){//placeholder,placeholder,placeholder
     c = this.length;
     while(c)b=Math.random()*c--|0,d=this[c],this[c]=this[b],this[b]=d
     return this;
-}
-
-
-String.prototype.stupify = function(){
-    var offset = 0;
-    return Array.from(this).map((x,i) => {
-        if(x == " ") offset--;
-        return (i + offset) % 2 == 1 ? x.toUpperCase() : x.toLowerCase();
-        }).join("");
-}
-    
-var Mathd = {
-    sin: function(number){
-        return Math.sin(degToRad(number));
-    },
-    cos: function(number){
-        return Math.cos(degToRad(number));
-    },
-    tan: function(number){
-        return Math.tan(degToRad(number));
-    },
-    asin: function(number){
-        return radToDeg(Math.asin(number));
-    },
-    acos: function(number){
-       return radToDeg(Math.acos(number));
-    },
-    atan: function(number){
-       return radToDeg(Math.atan(number));
-    }
 };
 
-var PLC = {
-    convertTime: function (inputtime){
-        var hundredsSeconds = (inputtime & 0xff); //1/100th of a second
-        var seconds         = ((inputtime >> 8) & 0xff);
-        var minutes         = ((inputtime >> 16) & 0xff);
-        var hours           = ((inputtime >> 24) & 0xff);
+
+String.prototype.scrambleLetterCase = function(){ //Spongebob meme letter case: lIkE tHiS
+    var offset = 0;
+    return Array.from(this.toLowerCase()).map((x,i) => {
+        var charCode = x.charCodeAt();
+        if(!(charCode >= 65 && charCode <= 127)) offset--;
+        return (i + offset) % 2 == 1 ? x.toUpperCase() : x;
+    }).join("");
+};
+
+String.prototype.scrambleLettersInWords = function(){ //first and last char in every word stays, the rest gets scrambled within the words
+    return this.split(' ').map(x => {
+        if(x.length < 4) return x;
+        var wholeWord = x.split('');
         
-        return hours + ":" + minutes + ":" + seconds + "." + hundredsSeconds;
-    }
+        return wholeWord[0] + wholeWord.slice(1,-1).shuffle().join('') + wholeWord[wholeWord.length -1];
+    }).join(' ');
 }
