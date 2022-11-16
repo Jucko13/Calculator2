@@ -179,6 +179,35 @@ var PLC = {
     }
 };
 
+
+var Resistor = {
+    Ohm: (voltage, ampere, notation) => voltage / ampere + (notation ? ' Ω' : 0), //r = u / i
+    Voltage: (ampere, ohm, notation) => ampere * ohm + (notation ? ' V' : 0),     //u = i * r
+    Ampere: (voltage, ohm, notation) => voltage / ohm + (notation ? ' A' : 0),    //i = u / r
+    Parallel: (...ohms) => 1 / ohms.map(x => 1/x).sum(),
+    Series: (...ohms) => ohms.sum()
+}
+
+var Capacitor = {
+    Series: (...c) => 1 / c.map(x => 1/x).sum(),
+    Parallel: (...c) => c.sum()
+}
+
+var Temperature = {
+    FromCelcius: (c) => Temperature.ConvertKelvin(c + 273.15),
+    FromFarenheit: (f) => Temperature.ConvertKelvin((f + 459.67) * (5/9)),
+    FromKelvin: (k) => Temperature.ConvertKelvin(k),
+    
+    ConvertKelvin: (k) => {
+        return {
+            ToCelcius: () => k - 273.15,
+            ToKelvin: () => k,
+            ToFarenheit: () => k / (5/9) - 459.67,
+        };   
+    }
+};
+
+
 //importNamespace('System.Numerics');
 
 //big = (intString1) => new BigInt(intString1);

@@ -14,6 +14,11 @@ function fun(){
     return ('b' + 'a' + + 'a' + 'a').toLowerCase()
 }
 
+function ResistorOhm(voltage, ampere){
+    return voltage / ampere;
+}
+
+
 function CaptureSelection(){
     //MessageBox.Show("what");
     var t = importNamespace('Toolbox.Logging');
