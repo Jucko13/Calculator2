@@ -1,18 +1,17 @@
-
 //var color = importNamespace("System.Drawing.Color");
 
-
-
-Array.prototype.lengthNotNull = function(){
+Array.prototype.lengthNotNull = function() {
     return this.length > 0;
 };
 
-Array.prototype.average = function(){
-    return this.sum() / this.length;
+Array.prototype.average = function(func) {
+    return this.sum(func) / this.length;
 };
 
-Array.prototype.median = function(){
-    const sorted = Array.from(this).sort((a, b) => a - b);
+Array.prototype.median = function(func) {
+    func = func || function(x) { return x; };
+    
+    const sorted = Array.from(this).map(func).sort((a, b) => a - b);
     const middle = Math.floor(sorted.length / 2);
 
     if (sorted.length % 2 === 0) {
@@ -22,19 +21,22 @@ Array.prototype.median = function(){
     return sorted[middle];
 };
 
-Array.prototype.sum = function(){
-    return this.reduce( ( p, c ) => +p + +c, 0 );
+Array.prototype.sum = function(func) {
+    func = func || function(x) { return x; };
+    return this.map(func).reduce( ( p, c ) => +p + +c, 0);
 };
 
-Array.prototype.min = function(){
-    return this.reduce( ( p, c ) => Math.min(p,c));
+Array.prototype.min = function(func) {
+    func = func || function(x) { return x; };
+    return this.map(func).reduce( ( p, c ) => Math.min(p,c));
 };
 
-Array.prototype.max = function(){
-    return this.reduce( ( p, c ) => Math.max(p,c));
+Array.prototype.max = function(func) {
+    func = func || function(x) { return x; };
+    return this.map(func).reduce( ( p, c ) => Math.max(p,c));
 };
 
-Array.prototype.hex = function(padding = 0, prefix = "", suffix = ""){
+Array.prototype.hex = function(padding = 0, prefix = "", suffix = "") {
     return this.map(x => prefix + x.toString(16).padStart(padding, 0) + suffix);
 };
 
@@ -46,7 +48,7 @@ Array.prototype.shuffle = function(b,c,d){//placeholder,placeholder,placeholder
 };
 
 
-String.prototype.scrambleLetterCase = function(){ //Spongebob meme letter case: lIkE tHiS
+String.prototype.scrambleLetterCase = function() { //Spongebob meme letter case: lIkE tHiS
     var offset = 0;
     return Array.from(this.toLowerCase()).map((x,i) => {
         var charCode = x.charCodeAt();
@@ -55,7 +57,7 @@ String.prototype.scrambleLetterCase = function(){ //Spongebob meme letter case: 
     }).join("");
 };
 
-String.prototype.scrambleLettersInWords = function(){ //first and last char in every word stays, the rest gets scrambled within the words
+String.prototype.scrambleLettersInWords = function() { //first and last char in every word stays, the rest gets scrambled within the words
     return this.split(' ').map(x => {
         if(x.length < 4) return x;
         var wholeWord = x.split('');

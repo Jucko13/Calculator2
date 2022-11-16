@@ -121,29 +121,33 @@ var Lib = {
     Dec: function(val){
         var k    = importNamespace('Toolbox.Helper');
         return k.BigDecimal.Parse(val);
+    },
+    
+    //From https://stackoverflow.com/questions/37568712/making-a-range-function-in-javascript
+    range: function (lower,upper,step = 1) {
+        return Array.from(new Array(Math.floor(upper/step-lower/step)+1),(_,i)=>lower/step+i).map(x=>x*step)
     }
-
 };
 
     
 var Matd = {
     sin: function(number){
-        return Math.sin(degToRad(number));
+        return Math.sin(Mate.degToRad(number));
     },
     cos: function(number){
-        return Math.cos(degToRad(number));
+        return Math.cos(Mate.degToRad(number));
     },
     tan: function(number){
-        return Math.tan(degToRad(number));
+        return Math.tan(Mate.degToRad(number));
     },
     asin: function(number){
-        return radToDeg(Math.asin(number));
+        return Mate.radToDeg(Math.asin(number));
     },
     acos: function(number){
-       return radToDeg(Math.acos(number));
+       return Mate.radToDeg(Math.acos(number));
     },
     atan: function(number){
-       return radToDeg(Math.atan(number));
+       return Mate.radToDeg(Math.atan(number));
     }
 };
 
