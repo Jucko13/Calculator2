@@ -19,7 +19,6 @@ D:\Users\ricar\Documents\GitHub\Calculator2\Calculator2\bin\Debug\net6.0-windows
 D:\Users\ricar\Documents\GitHub\Calculator2\Calculator2\bin\Debug\net6.0-windows\Calculator2.deps.json
 D:\Users\ricar\Documents\GitHub\Calculator2\Calculator2\bin\Debug\net6.0-windows\Calculator2.runtimeconfig.json
 D:\Users\ricar\Documents\GitHub\Calculator2\Calculator2\bin\Debug\net6.0-windows\Calculator2.dll
-D:\Users\ricar\Documents\GitHub\Calculator2\Calculator2\bin\Debug\net6.0-windows\ref\Calculator2.dll
 D:\Users\ricar\Documents\GitHub\Calculator2\Calculator2\bin\Debug\net6.0-windows\Calculator2.pdb
 D:\Users\ricar\Documents\GitHub\Calculator2\Calculator2\bin\Debug\net6.0-windows\FastColoredTextBox.dll
 D:\Users\ricar\Documents\GitHub\Calculator2\Calculator2\obj\Debug\net6.0-windows\Calculator2.csproj.AssemblyReference.cache
@@ -51,3 +50,9 @@ D:\Ricardo\Github\Calculator2\Calculator2\bin\Debug\net6.0-windows\EPPlus.dll
 D:\Ricardo\Github\Calculator2\Calculator2\bin\Debug\net6.0-windows\Toolbox.pdb
 D:\Ricardo\Github\Calculator2\Calculator2\bin\Debug\net6.0-windows\Toolbox.dll.config
 D:\Ricardo\Github\Calculator2\Calculator2\bin\Debug\net6.0-windows\EPPlus.xml
+D:\Users\ricar\Documents\GitHub\Calculator2\Calculator2\bin\Debug\net6.0-windows\Toolbox.dll
+D:\Users\ricar\Documents\GitHub\Calculator2\Calculator2\bin\Debug\net6.0-windows\EPPlus.dll
+D:\Users\ricar\Documents\GitHub\Calculator2\Calculator2\bin\Debug\net6.0-windows\Toolbox.pdb
+D:\Users\ricar\Documents\GitHub\Calculator2\Calculator2\bin\Debug\net6.0-windows\Toolbox.dll.config
+D:\Users\ricar\Documents\GitHub\Calculator2\Calculator2\bin\Debug\net6.0-windows\EPPlus.xml
+D:\Users\ricar\Documents\GitHub\Calculator2\Calculator2\obj\Debug\net6.0-windows\refint\Calculator2.dll

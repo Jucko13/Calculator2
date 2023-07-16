@@ -126,6 +126,23 @@ var Lib = {
     //From https://stackoverflow.com/questions/37568712/making-a-range-function-in-javascript
     range: function (lower,upper,step = 1) {
         return Array.from(new Array(Math.floor(upper/step-lower/step)+1),(_,i)=>lower/step+i).map(x=>x*step)
+    },
+    
+    copiedFileNames: function(){
+        return Array.from(Clipboard.GetFileDropList()).map(x => x.substring(x.lastIndexOf('\\') + 1))
+    }
+    toggleSlash: function(input){
+        var text = input || Clipboard.GetText();
+        var res  = text;
+        
+        if(text.indexOf("\\") != -1) {
+            res = text.replaceAll("\\", "/");
+        }else if(text.indexOf("/") != -1) {
+            res = text.replaceAll("/", "\\");
+        }
+    
+        Clipboard.SetText(res);
+        return res;
     }
 };
 

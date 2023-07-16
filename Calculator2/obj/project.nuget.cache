@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "xgFePTEmaVbPmGUHcu/dxMTJz09pUMAKY++8t5/KGsE6opK6bGqee9ZAv/zYtrzcXWXHbTvERAhxwDUgOtvCfw==",
+  "dgSpecHash": "jD42CwEqMx+dg9bam1BS1VKC8T8jOTka8thEU8/IIQgEgkSm3g2n88sZYqO461Ilq8oBEum9DGOtxA9u8ByjZg==",
   "success": true,
-  "projectFilePath": "D:\\Ricardo\\Github\\Calculator2\\Calculator2\\Calculator2.csproj",
+  "projectFilePath": "D:\\Users\\ricar\\Documents\\GitHub\\Calculator2\\Calculator2\\Calculator2.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\ricar\\.nuget\\packages\\esprima\\3.0.0-beta-6\\esprima.3.0.0-beta-6.nupkg.sha512",
     "C:\\Users\\ricar\\.nuget\\packages\\jint\\3.0.0-beta-2040\\jint.3.0.0-beta-2040.nupkg.sha512",
